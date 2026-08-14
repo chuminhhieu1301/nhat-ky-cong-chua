@@ -58,7 +58,6 @@
       transform: translateY(-4px);
       box-shadow: 0 12px 20px -3px rgba(255, 77, 109, 0.2);
     }
-    /* Hiệu ứng hoa & tim rơi nhẹ */
     @keyframes float {
       0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
       100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
@@ -74,7 +73,7 @@
     }
   </style>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK Compat -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
@@ -195,7 +194,6 @@
       </div>
 
       <div id="postsList" class="space-y-4">
-        <!-- Vùng hiển thị trạng thái tải / danh sách tin nhắn -->
         <div class="text-center py-12 text-princess-400 font-medium">
           <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
           <p class="text-sm">Đang mở hộp thư bí mật...</p>
@@ -211,16 +209,16 @@
 
   <script>
     // =========================================================================
-    // CẤU HÌNH FIREBASE CHO DỰ ÁN PRINCESSMEOMEO
+    // CẤU HÌNH FIREBASE CHUẨN XÁC DỰ ÁN PRINCESSMEOMEO
     // =========================================================================
     const firebaseConfig = {
-      apiKey: "AIzaSyApXsxyEbRH9W30KVyINT9_H3VXqP8Ko5Y",
+      apiKey: "AIzaSyApXsxyEbrH9W30KVyINT9_H3VXqP8Ko5Y",
       authDomain: "princessmeomeo.firebaseapp.com",
       databaseURL: "https://princessmeomeo-default-rtdb.firebaseio.com",
       projectId: "princessmeomeo",
       storageBucket: "princessmeomeo.firebasestorage.app",
       messagingSenderId: "240385247065",
-      appId: "1:240385247065:web:8c69b3f03dadce03c06e48",
+      appId: "1:240385247065:web:8c69b3f83dadce03c06e48",
       measurementId: "G-L4L79M7BMQ"
     };
 
@@ -232,13 +230,11 @@
     const postsList = document.getElementById('postsList');
     const postCount = document.getElementById('postCount');
 
-    // Hàm định dạng ngày giờ
     function formatDate(timestamp) {
       const d = new Date(timestamp);
       return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')} • ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
     }
 
-    // Render danh sách tin nhắn
     function renderPosts(posts) {
       postsList.innerHTML = '';
       const keys = Object.keys(posts || {}).reverse();
@@ -279,20 +275,19 @@
       });
     }
 
-    // Tránh mã độc XSS
     function escapeHtml(text) {
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
     }
 
-    // Lắng nghe dữ liệu theo thời gian thực từ Realtime Database
+    // Lắng nghe dữ liệu
     db.ref('diary_entries').on('value', (snapshot) => {
       const data = snapshot.val();
       renderPosts(data);
     }, (error) => {
       console.error("Lỗi đọc dữ liệu:", error);
-      postsList.innerHTML = `<div class="text-center py-6 text-xs text-red-500 bg-red-50 rounded-2xl p-4">Lỗi kết nối cơ sở dữ liệu: Vui lòng kiểm tra tab Rules trên Firebase đã đặt thành true chưa!</div>`;
+      postsList.innerHTML = `<div class="text-center py-6 text-xs text-red-500 bg-red-50 rounded-2xl p-4">Lỗi kết nối cơ sở dữ liệu: Vui lòng kiểm tra tab Rules trên Firebase đã đặt true chưa!</div>`;
     });
 
     // Xử lý gửi bài
