@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notre Univers • Capoo & Princess</title>
+  <title>chérie • capoo & princess (paris ⇄ hanoi)</title>
 
-  <!-- Google Fonts: Editorial Serif + Minimal Modern Sans -->
+  <!-- Google Fonts: Editorial Serif & Minimal Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -19,16 +19,16 @@
         extend: {
           colors: {
             notion: {
-              bg: '#FBF9F7',
-              sidebar: '#F7F4F0',
-              hover: '#F2ECE6',
-              border: '#EAE2DB',
+              bg: '#FAF7F5',
+              border: '#E8DFD8',
               text: '#37352F',
               muted: '#787774',
-              pink: '#F4DCD6',
-              pinkDark: '#C86D64',
-              blue: '#D6EAF8',
-              blueDark: '#4A90E2'
+              pinkBg: '#FFF0F3',
+              pinkBorder: '#F8B4C0',
+              pinkDark: '#C25952',
+              blueBg: '#F0F7FF',
+              blueBorder: '#B8DAFF',
+              blueDark: '#3A86C8'
             }
           },
           fontFamily: {
@@ -43,31 +43,23 @@
 
   <style>
     body {
-      background-color: #FBF9F7;
+      background-color: #FAF7F5;
       color: #37352F;
       min-height: 100vh;
     }
 
-    /* Đường kẻ phân cách & block hover */
-    .notion-block {
-      transition: background-color 0.15s ease;
-      position: relative;
-    }
-    .notion-block:hover {
-      background-color: rgba(242, 236, 230, 0.4);
-    }
-    .notion-block:hover .block-actions {
-      opacity: 1;
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(232, 223, 216, 0.8);
     }
 
-    /* Tùy chỉnh Checkbox kiểu Notion */
     .notion-checkbox {
       appearance: none;
-      width: 17px;
-      height: 17px;
-      border: 1.5px solid #C86D64;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #C25952;
       border-radius: 4px;
-      outline: none;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -75,16 +67,15 @@
       transition: all 0.15s ease;
     }
     .notion-checkbox:checked {
-      background-color: #C86D64;
+      background-color: #C25952;
     }
     .notion-checkbox:checked::after {
       content: '✓';
       color: white;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: bold;
     }
 
-    /* Hiệu ứng nhún nhảy Bugcat Capoo */
     @keyframes capooBounce {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-4px); }
@@ -94,158 +85,209 @@
     }
   </style>
 
-  <!-- Firebase Realtime Database SDK -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 
-<body class="font-sans antialiased selection:bg-notion-pink selection:text-notion-pinkDark">
+<body class="font-sans antialiased pb-24 selection:bg-notion-pinkBorder/40">
 
-  <!-- Notion Cover Banner -->
-  <div class="w-full h-44 md:h-56 bg-gradient-to-r from-[#FDE8E9] via-[#F8E3E8] to-[#E3EFFB] relative border-b border-notion-border overflow-hidden">
-    <div class="absolute inset-0 opacity-40 bg-[radial-gradient(#C86D64_1px,transparent_1px)] [background-size:16px_16px]"></div>
-    <div class="absolute top-4 right-6 flex items-center space-x-2 text-[11px] text-notion-muted bg-white/70 backdrop-blur-md px-3 py-1 rounded-full border border-notion-border">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-      <span id="syncStatus">Synced with Cloud</span>
-    </div>
-  </div>
-
-  <!-- Notion Page Container -->
-  <div class="max-w-3xl mx-auto px-6 md:px-12 -mt-14 pb-28">
-
-    <!-- Notion Page Icon (Capoo) -->
-    <div class="relative inline-block group">
-      <div class="w-24 h-24 rounded-2xl bg-white border border-notion-border shadow-md flex items-center justify-center p-2">
-        <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" alt="Bugcat Capoo" class="w-full h-full object-contain capoo-anim">
-      </div>
-      <div class="absolute -bottom-2 -right-2 bg-notion-pink text-notion-pinkDark text-xs px-2 py-0.5 rounded-full font-serif font-bold shadow-sm border border-white">
-        🎀 2 co-authors
-      </div>
-    </div>
-
-    <!-- Page Title & Meta Properties -->
-    <div class="mt-6 mb-8">
-      <h1 class="font-serif text-3xl md:text-4xl font-bold tracking-tight text-notion-text">
-        Notre Espace Partagé ☁️
-      </h1>
-      <p class="text-xs text-notion-muted mt-1 italic font-serif">
-        Trang nhật ký & kế hoạch sống chung của Bugcat Capoo 🐱🐛 và Công Chúa 👑
-      </p>
-
-      <!-- Notion Properties Table -->
-      <div class="mt-6 border-y border-notion-border/70 py-3 space-y-2 text-xs">
-        <div class="flex items-center">
-          <div class="w-32 text-notion-muted flex items-center gap-1.5 font-medium">
-            <i class="fa-regular fa-user text-[11px]"></i> Tác giả
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 bg-notion-blue/60 text-notion-blueDark rounded-md font-medium text-[11px]">🐱🐛 Capoo</span>
-            <span class="px-2 py-0.5 bg-notion-pink/60 text-notion-pinkDark rounded-md font-medium text-[11px]">👑 Princess</span>
-          </div>
+  <!-- Top Navigation & Live Dual Time Clock -->
+  <nav class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-notion-border px-4 py-2.5">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Live World Clocks (Hà Nội 🇻🇳 vs Paris 🇫🇷) -->
+      <div class="flex items-center space-x-4 text-xs font-mono">
+        <div class="flex items-center gap-1.5 bg-notion-blueBg border border-notion-blueBorder px-2.5 py-1 rounded-full text-notion-blueDark">
+          <span>🇻🇳 Hà Nội:</span>
+          <span id="clockVN" class="font-bold">--:--:--</span>
         </div>
-
-        <div class="flex items-center">
-          <div class="w-32 text-notion-muted flex items-center gap-1.5 font-medium">
-            <i class="fa-regular fa-heart text-[11px]"></i> Tâm trạng
-          </div>
-          <div class="text-notion-text font-medium flex items-center gap-2 text-[11px]">
-            <span>Chill chill • Thèm thịt 🍖 • Nhớ nhau 🎀</span>
-          </div>
-        </div>
-
-        <div class="flex items-center">
-          <div class="w-32 text-notion-muted flex items-center gap-1.5 font-medium">
-            <i class="fa-regular fa-clock text-[11px]"></i> Tổng số khối
-          </div>
-          <div id="blockStats" class="text-notion-muted font-mono text-[11px]">
-            0 khối đã lưu
-          </div>
+        <div class="flex items-center gap-1.5 bg-notion-pinkBg border border-notion-pinkBorder px-2.5 py-1 rounded-full text-notion-pinkDark">
+          <span>🇫🇷 Paris:</span>
+          <span id="clockFR" class="font-bold">--:--:--</span>
         </div>
       </div>
+
+      <!-- Auth Profile State -->
+      <div id="authStatus" class="flex items-center gap-3 text-xs">
+        <button onclick="openLoginModal()" class="px-3.5 py-1.5 bg-notion-text text-white rounded-xl hover:bg-black transition">
+          <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Đăng nhập
+        </button>
+      </div>
+
     </div>
+  </nav>
 
-    <!-- Notion Floating / Inline Block Adder -->
-    <div class="mb-10 p-5 rounded-2xl bg-white border border-notion-border shadow-sm">
-      <div class="flex items-center justify-between mb-3">
-        <div class="flex items-center space-x-3 text-xs">
-          <span class="text-notion-muted font-medium">Người viết:</span>
-          <label class="cursor-pointer">
-            <input type="radio" name="activeAuthor" value="Capoo 🐱🐛" checked class="peer hidden">
-            <span class="px-2.5 py-1 rounded-lg border border-notion-border text-notion-muted peer-checked:bg-notion-blue/50 peer-checked:border-notion-blueDark peer-checked:text-notion-blueDark font-medium transition text-xs">
-              🐱🐛 Capoo
-            </span>
-          </label>
-          <label class="cursor-pointer">
-            <input type="radio" name="activeAuthor" value="Princess 👑" class="peer hidden">
-            <span class="px-2.5 py-1 rounded-lg border border-notion-border text-notion-muted peer-checked:bg-notion-pink/50 peer-checked:border-notion-pinkDark peer-checked:text-notion-pinkDark font-medium transition text-xs">
-              👑 Công chúa
-            </span>
-          </label>
+  <!-- Cover Header -->
+  <header class="max-w-6xl mx-auto px-4 md:px-8 pt-8 pb-6 text-center">
+    <div class="inline-block relative">
+      <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" class="w-16 h-16 mx-auto capoo-anim object-contain" alt="Capoo">
+      <span class="absolute -top-1 -right-2 text-sm">👑</span>
+    </div>
+    <h1 class="font-serif text-3xl md:text-4xl font-bold tracking-tight text-notion-text mt-2">
+      Notre Espace Partagé
+    </h1>
+    <p class="text-xs text-notion-muted italic font-serif mt-1">
+      khoảng cách 9,000 km chẳng xa khi chúng mình cùng chung một trang sách ☁️✨
+    </p>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-4 md:px-8">
+
+    <!-- Composer Section (Chỉ hiển thị khi đã đăng nhập) -->
+    <div id="composerCard" class="hidden glass-card rounded-3xl p-5 mb-8 border border-notion-border shadow-sm">
+      <div class="flex items-center justify-between border-b border-notion-border/60 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+          <span id="activeUserBadge" class="text-xs font-semibold px-3 py-1 rounded-full"></span>
+          <span class="text-xs text-notion-muted">đang viết vào trang...</span>
         </div>
-
-        <!-- Block Type Selector -->
-        <select id="blockType" class="text-xs bg-notion-hover border border-notion-border rounded-lg px-2.5 py-1 text-notion-text outline-none cursor-pointer">
+        <select id="blockType" class="text-xs bg-white border border-notion-border rounded-xl px-3 py-1 text-notion-text outline-none cursor-pointer">
           <option value="text">📝 Đoạn văn (Text)</option>
           <option value="todo">☑️ To-Do việc cùng làm</option>
-          <option value="callout_capoo">🐱 Hộp lưu ý Capoo</option>
-          <option value="callout_princess">👑 Hộp bí mật Công chúa</option>
+          <option value="callout">💬 Hộp lưu ý đặc biệt</option>
           <option value="image">📸 Đính kèm ảnh</option>
         </select>
       </div>
 
-      <!-- Text / Content Input -->
-      <div id="textInputContainer">
+      <div class="space-y-3">
         <textarea 
           id="blockContent" 
           rows="2" 
-          placeholder="Nhập nội dung mới vào đây... (Gõ như đang viết trên trang Notion của 2 người)"
-          class="w-full p-3 rounded-xl bg-notion-bg border border-notion-border focus:border-notion-pinkDark focus:bg-white focus:outline-none text-xs leading-relaxed text-notion-text transition"
+          placeholder="Viết một mẩu chuyện hôm nay gửi người ấy nhé..." 
+          class="w-full p-3.5 rounded-2xl bg-white border border-notion-border focus:border-notion-pinkDark focus:outline-none text-xs leading-relaxed transition"
         ></textarea>
-      </div>
 
-      <!-- Image Input (Ẩn hiện linh hoạt) -->
-      <div id="imageInputContainer" class="hidden space-y-2 mt-2">
-        <label for="imagePicker" class="cursor-pointer inline-flex items-center gap-2 px-3 py-2 bg-notion-bg border border-notion-border rounded-xl text-xs text-notion-text hover:bg-notion-hover transition">
-          <i class="fa-regular fa-image text-notion-pinkDark"></i>
-          <span id="imgPickerLabel">Chọn ảnh chèn vào trang...</span>
-        </label>
-        <input type="file" id="imagePicker" accept="image/*" class="hidden">
-        <div id="imgPreviewBox" class="hidden"></div>
-      </div>
+        <div id="imageInputContainer" class="hidden flex items-center space-x-3">
+          <label for="imagePicker" class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 bg-white border border-notion-border rounded-xl text-xs text-notion-text hover:bg-gray-50 transition">
+            <i class="fa-regular fa-image text-notion-pinkDark"></i>
+            <span id="imgPickerLabel">Chọn ảnh từ máy...</span>
+          </label>
+          <input type="file" id="imagePicker" accept="image/*" class="hidden">
+          <div id="imgPreviewBox" class="hidden"></div>
+        </div>
 
-      <!-- Submit Block Button -->
-      <div class="mt-3 flex justify-end">
-        <button 
-          id="addBlockBtn"
-          class="px-4 py-2 bg-notion-text hover:bg-black text-white text-xs font-medium rounded-xl transition flex items-center gap-1.5 shadow-sm active:scale-98"
-        >
-          <i class="fa-solid fa-plus text-[10px]"></i>
-          <span>Thêm vào trang</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Continuous Notion Canvas (Dòng chảy cuộn các Block) -->
-    <div class="relative">
-      <div class="text-[11px] font-mono text-notion-muted mb-3 flex items-center gap-2">
-        <span>— LIVING DOCUMENT CONTENT —</span>
-      </div>
-
-      <div id="canvasBlocks" class="space-y-1">
-        <!-- Vùng render động toàn bộ các block -->
-        <div class="text-center py-16 text-notion-muted text-xs">
-          <i class="fa-solid fa-spinner fa-spin text-lg mb-2"></i>
-          <p>Đang đồng bộ trang Notion...</p>
+        <div class="flex justify-end pt-1">
+          <button 
+            id="addBlockBtn" 
+            class="px-5 py-2.5 bg-notion-text hover:bg-black text-white text-xs font-medium rounded-2xl transition flex items-center gap-2 shadow-sm active:scale-95"
+          >
+            <span>Đăng lên trang</span>
+            <span>💌</span>
+          </button>
         </div>
       </div>
     </div>
 
+    <!-- Login Callout nếu chưa đăng nhập -->
+    <div id="loginPrompt" class="glass-card rounded-3xl p-6 text-center mb-8 border border-dashed border-notion-border">
+      <p class="text-xs text-notion-muted mb-3">🔒 Vui lòng đăng nhập tài khoản của bạn để bắt đầu viết và chỉnh sửa.</p>
+      <button onclick="openLoginModal()" class="px-5 py-2 bg-notion-text text-white text-xs font-medium rounded-xl hover:bg-black transition shadow-sm">
+        Đăng nhập ngay 🎀
+      </button>
+    </div>
+
+    <!-- 2 Cột Riêng Biệt (Dual Columns) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Cột 1: Bugcat Capoo (Trái - Xanh Pastel) -->
+      <section class="flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b-2 border-notion-blueBorder mb-4 px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-notion-blueBg border border-notion-blueBorder flex items-center justify-center text-sm">🐱🐛</span>
+            <div>
+              <h2 class="text-xs font-bold text-notion-blueDark tracking-wider uppercase">Góc của Capoo</h2>
+              <p class="text-[10px] text-notion-muted">Bugcat Capoo's Feed</p>
+            </div>
+          </div>
+          <span id="capooCount" class="text-[10px] font-mono bg-notion-blueBg text-notion-blueDark px-2 py-0.5 rounded-full border border-notion-blueBorder">0 mẩu</span>
+        </div>
+
+        <div id="capooFeed" class="space-y-4 flex-1">
+          <div class="text-center py-12 text-notion-muted text-xs">Đang tải góc Capoo...</div>
+        </div>
+      </section>
+
+      <!-- Cột 2: Princess (Phải - Hồng Coquette) -->
+      <section class="flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b-2 border-notion-pinkBorder mb-4 px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-notion-pinkBg border border-notion-pinkBorder flex items-center justify-center text-sm">👑🎀</span>
+            <div>
+              <h2 class="text-xs font-bold text-notion-pinkDark tracking-wider uppercase">Góc Công Chúa</h2>
+              <p class="text-[10px] text-notion-muted">Princess's Chamber</p>
+            </div>
+          </div>
+          <span id="princessCount" class="text-[10px] font-mono bg-notion-pinkBg text-notion-pinkDark px-2 py-0.5 rounded-full border border-notion-pinkBorder">0 mẩu</span>
+        </div>
+
+        <div id="princessFeed" class="space-y-4 flex-1">
+          <div class="text-center py-12 text-notion-muted text-xs">Đang tải góc Công Chúa...</div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Login Modal Popup -->
+  <div id="loginModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl border border-notion-border relative">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xs">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <span class="text-3xl">🪞</span>
+        <h3 class="font-serif text-xl font-bold text-notion-text mt-1">Ai đang ghé thăm?</h3>
+        <p class="text-xs text-notion-muted">Chọn tài khoản của bạn để vào trang</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-notion-muted mb-1.5">Tài khoản</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="cursor-pointer">
+              <input type="radio" name="loginUser" value="capoo" checked class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-notion-border text-xs peer-checked:bg-notion-blueBg peer-checked:border-notion-blueDark peer-checked:text-notion-blueDark font-medium transition">
+                🐱 Capoo
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="loginUser" value="princess" class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-notion-border text-xs peer-checked:bg-notion-pinkBg peer-checked:border-notion-pinkDark peer-checked:text-notion-pinkDark font-medium transition">
+                👑 Công Chúa
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-notion-muted mb-1.5">Mật khẩu</label>
+          <input 
+            type="password" 
+            id="loginPassword" 
+            required 
+            placeholder="Nhập mật khẩu..." 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-notion-border bg-gray-50 text-xs focus:bg-white focus:outline-none focus:border-notion-pinkDark transition"
+          >
+          <p class="text-[10px] text-notion-muted mt-1">(Mặc định: <b>capoo123</b> hoặc <b>princess123</b>)</p>
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3 bg-notion-text hover:bg-black text-white text-xs font-medium rounded-xl transition shadow"
+        >
+          Xác nhận đăng nhập
+        </button>
+      </form>
+    </div>
   </div>
 
   <!-- JavaScript Logic -->
   <script>
     // =========================================================================
-    // CẤU HÌNH FIREBASE REALTIME DATABASE (PRINCESSMEOMEO - SINGAPORE)
+    // 1. CẤU HÌNH FIREBASE REALTIME DATABASE
     // =========================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyApXsxyEbrH9W30KVyINT9_H3VXqP8Ko5Y",
@@ -261,40 +303,143 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // DOM Elements
-    const canvasBlocks = document.getElementById('canvasBlocks');
-    const blockStats = document.getElementById('blockStats');
+    // =========================================================================
+    // 2. TÀI KHOẢN & MẬT KHẨU (Bạn có thể đổi mật khẩu ở đây)
+    // =========================================================================
+    const ACCOUNTS = {
+      capoo: {
+        id: 'capoo',
+        name: 'Bugcat Capoo 🐱🐛',
+        password: 'capoo123',
+        badgeClass: 'bg-notion-blueBg text-notion-blueDark border border-notion-blueBorder'
+      },
+      princess: {
+        id: 'princess',
+        name: 'Công Chúa 👑🎀',
+        password: 'princess123',
+        badgeClass: 'bg-notion-pinkBg text-notion-pinkDark border border-notion-pinkBorder'
+      }
+    };
+
+    let currentUser = JSON.parse(localStorage.getItem('notion_duo_user')) || null;
+
+    // =========================================================================
+    // 3. LIVE CLOCKS (HÀ NỘI & PARIS)
+    // =========================================================================
+    function updateLiveClocks() {
+      const now = new Date();
+      const timeVN = new Intl.DateTimeFormat('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+      }).format(now);
+
+      const timeFR = new Intl.DateTimeFormat('fr-FR', {
+        timeZone: 'Europe/Paris',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+      }).format(now);
+
+      document.getElementById('clockVN').textContent = timeVN;
+      document.getElementById('clockFR').textContent = timeFR;
+    }
+    setInterval(updateLiveClocks, 1000);
+    updateLiveClocks();
+
+    // Format Timestamp ra cả 2 múi giờ
+    function formatDualTime(timestamp) {
+      const d = new Date(timestamp);
+      const opt = { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+      const vnStr = new Intl.DateTimeFormat('vi-VN', { ...opt, timeZone: 'Asia/Ho_Chi_Minh' }).format(d);
+      const frStr = new Intl.DateTimeFormat('fr-FR', { ...opt, timeZone: 'Europe/Paris' }).format(d);
+      return `<span title="Giờ Việt Nam">🇻🇳 ${vnStr}</span> • <span title="Giờ Pháp">🇫🇷 ${frStr}</span>`;
+    }
+
+    // =========================================================================
+    // 4. QUẢN LÝ ĐĂNG NHẬP & PHÂN QUYỀN
+    // =========================================================================
+    const loginModal = document.getElementById('loginModal');
+    const loginForm = document.getElementById('loginForm');
+    const authStatus = document.getElementById('authStatus');
+    const composerCard = document.getElementById('composerCard');
+    const loginPrompt = document.getElementById('loginPrompt');
+    const activeUserBadge = document.getElementById('activeUserBadge');
+
+    function openLoginModal() { loginModal.classList.remove('hidden'); }
+    function closeLoginModal() { loginModal.classList.add('hidden'); }
+
+    function updateAuthUI() {
+      if (currentUser) {
+        authStatus.innerHTML = `
+          <span class="font-medium text-notion-text flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            ${currentUser.name}
+          </span>
+          <button onclick="logout()" class="text-xs text-red-500 hover:underline">Đăng xuất</button>
+        `;
+        composerCard.classList.remove('hidden');
+        loginPrompt.classList.add('hidden');
+        activeUserBadge.className = `text-xs font-semibold px-3 py-1 rounded-full ${ACCOUNTS[currentUser.id].badgeClass}`;
+        activeUserBadge.textContent = currentUser.name;
+      } else {
+        authStatus.innerHTML = `
+          <button onclick="openLoginModal()" class="px-3.5 py-1.5 bg-notion-text text-white rounded-xl hover:bg-black transition">
+            <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Đăng nhập
+          </button>
+        `;
+        composerCard.classList.add('hidden');
+        loginPrompt.classList.remove('hidden');
+      }
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const selectedUserId = document.querySelector('input[name="loginUser"]:checked').value;
+      const pass = document.getElementById('loginPassword').value.trim();
+
+      if (pass === ACCOUNTS[selectedUserId].password) {
+        currentUser = ACCOUNTS[selectedUserId];
+        localStorage.setItem('notion_duo_user', JSON.stringify(currentUser));
+        closeLoginModal();
+        loginForm.reset();
+        updateAuthUI();
+        // Re-render feed để hiển thị nút xóa đúng quyền
+        if (latestSnapshotData) renderDualColumns(latestSnapshotData);
+      } else {
+        alert("Mật khẩu không chính xác!");
+      }
+    });
+
+    window.logout = function() {
+      currentUser = null;
+      localStorage.removeItem('notion_duo_user');
+      updateAuthUI();
+      if (latestSnapshotData) renderDualColumns(latestSnapshotData);
+    };
+
+    updateAuthUI();
+
+    // =========================================================================
+    // 5. COMPOSER & IMAGE HANDLING
+    // =========================================================================
     const blockType = document.getElementById('blockType');
     const blockContent = document.getElementById('blockContent');
-    const textInputContainer = document.getElementById('textInputContainer');
     const imageInputContainer = document.getElementById('imageInputContainer');
     const imagePicker = document.getElementById('imagePicker');
     const imgPickerLabel = document.getElementById('imgPickerLabel');
     const imgPreviewBox = document.getElementById('imgPreviewBox');
     const addBlockBtn = document.getElementById('addBlockBtn');
-    const syncStatus = document.getElementById('syncStatus');
 
     let base64Image = null;
 
-    // Chuyển đổi giao diện khi chọn loại block
     blockType.addEventListener('change', () => {
-      const type = blockType.value;
-      if (type === 'image') {
+      if (blockType.value === 'image') {
         imageInputContainer.classList.remove('hidden');
-        blockContent.placeholder = "Chú thích ảnh (Caption tùy chọn)...";
-      } else if (type === 'todo') {
-        imageInputContainer.classList.add('hidden');
-        blockContent.placeholder = "Nhập việc muốn làm cùng nhau (Ví dụ: Đi ăn lẩu, xem phim cuối tuần)...";
-      } else if (type.startsWith('callout')) {
-        imageInputContainer.classList.add('hidden');
-        blockContent.placeholder = "Nhập lời nhắn đặc biệt cần chú ý...";
+        blockContent.placeholder = "Ghi chú cho ảnh (tùy chọn)...";
       } else {
         imageInputContainer.classList.add('hidden');
-        blockContent.placeholder = "Nhập nội dung mới vào đây...";
+        blockContent.placeholder = "Viết một mẩu chuyện hôm nay gửi người ấy nhé...";
       }
     });
 
-    // Nén ảnh tự động
     function compressImage(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -305,8 +450,7 @@
           img.onload = () => {
             const canvas = document.createElement('canvas');
             const maxWidth = 1000;
-            let width = img.width;
-            let height = img.height;
+            let width = img.width, height = img.height;
             if (width > maxWidth) {
               height = Math.round((height * maxWidth) / width);
               width = maxWidth;
@@ -329,13 +473,8 @@
       base64Image = await compressImage(file);
       imgPickerLabel.textContent = file.name;
       imgPreviewBox.classList.remove('hidden');
-      imgPreviewBox.innerHTML = `<img src="${base64Image}" class="max-h-36 rounded-lg border border-notion-border object-cover">`;
+      imgPreviewBox.innerHTML = `<img src="${base64Image}" class="max-h-24 rounded-lg border border-notion-border object-cover">`;
     });
-
-    function formatTime(timestamp) {
-      const d = new Date(timestamp);
-      return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')} • ${d.getDate()}/${d.getMonth()+1}`;
-    }
 
     function escapeHtml(text) {
       const div = document.createElement('div');
@@ -343,141 +482,34 @@
       return div.innerHTML;
     }
 
-    // Toggle trạng thái To-Do Realtime
+    // Toggle To-do
     window.toggleTodo = function(key, currentStatus) {
-      db.ref(`notion_blocks/${key}/completed`).set(!currentStatus);
+      db.ref(`notion_duo_blocks/${key}/completed`).set(!currentStatus);
     };
 
-    // Xóa block
-    window.deleteBlock = function(key) {
-      if (confirm("Bạn có chắc muốn xóa khối nội dung này khỏi trang Notion?")) {
-        db.ref(`notion_blocks/${key}`).remove();
+    // Xóa bài (Chỉ người tạo mới được gọi)
+    window.deleteBlock = function(key, authorId) {
+      if (!currentUser || currentUser.id !== authorId) {
+        alert("Bạn chỉ có thể xóa mẩu tin do chính bạn viết!");
+        return;
+      }
+      if (confirm("Bạn có chắc chắn muốn xóa mẩu nội dung này?")) {
+        db.ref(`notion_duo_blocks/${key}`).remove();
       }
     };
 
-    // Render Canvas Blocks
-    function renderCanvas(blocks) {
-      canvasBlocks.innerHTML = '';
-      const keys = Object.keys(blocks || {});
-      blockStats.textContent = `${keys.length} khối nội dung`;
-
-      if (keys.length === 0) {
-        canvasBlocks.innerHTML = `
-          <div class="text-center py-20 border-2 border-dashed border-notion-border rounded-2xl p-8">
-            <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" class="w-12 h-12 mx-auto mb-2 opacity-60">
-            <p class="font-serif text-base text-notion-text font-semibold">Trang Notion này đang trống...</p>
-            <p class="text-xs text-notion-muted mt-1">Capoo & Công chúa hãy thêm đoạn văn, to-do hoặc ảnh đầu tiên ở phía trên nhé!</p>
-          </div>
-        `;
+    // Gửi block mới
+    addBlockBtn.addEventListener('click', async () => {
+      if (!currentUser) {
+        openLoginModal();
         return;
       }
 
-      keys.forEach(key => {
-        const item = blocks[key];
-        const isCapoo = item.author && item.author.includes('Capoo');
-        const blockEl = document.createElement('div');
-        blockEl.className = "notion-block rounded-xl p-3 group";
-
-        let innerContent = '';
-
-        // 1. Text Block
-        if (item.type === 'text') {
-          innerContent = `
-            <div class="flex items-start gap-2.5">
-              <span class="text-[10px] text-notion-muted mt-1 select-none font-mono opacity-40">¶</span>
-              <div class="flex-1">
-                <p class="text-xs leading-relaxed text-notion-text whitespace-pre-line">${escapeHtml(item.content)}</p>
-              </div>
-            </div>
-          `;
-        } 
-        // 2. To-Do Block
-        else if (item.type === 'todo') {
-          innerContent = `
-            <div class="flex items-start gap-2.5">
-              <input 
-                type="checkbox" 
-                ${item.completed ? 'checked' : ''} 
-                onchange="toggleTodo('${key}', ${item.completed})" 
-                class="notion-checkbox mt-0.5"
-              >
-              <div class="flex-1">
-                <span class="text-xs leading-relaxed ${item.completed ? 'line-through text-notion-muted/70' : 'text-notion-text'} transition">
-                  ${escapeHtml(item.content)}
-                </span>
-              </div>
-            </div>
-          `;
-        }
-        // 3. Callout Block (Capoo hoặc Princess)
-        else if (item.type === 'callout_capoo') {
-          innerContent = `
-            <div class="p-3.5 bg-notion-blue/30 border border-notion-blueDark/20 rounded-xl flex items-start gap-3">
-              <span class="text-base select-none">🐱🍖</span>
-              <div class="flex-1">
-                <div class="text-[10px] font-semibold text-notion-blueDark uppercase tracking-wider mb-0.5">Lời nhắn từ Capoo:</div>
-                <p class="text-xs text-notion-text leading-relaxed whitespace-pre-line">${escapeHtml(item.content)}</p>
-              </div>
-            </div>
-          `;
-        } else if (item.type === 'callout_princess') {
-          innerContent = `
-            <div class="p-3.5 bg-notion-pink/30 border border-notion-pinkDark/20 rounded-xl flex items-start gap-3">
-              <span class="text-base select-none">👑🎀</span>
-              <div class="flex-1">
-                <div class="text-[10px] font-semibold text-notion-pinkDark uppercase tracking-wider mb-0.5">Lời thì thầm từ Công Chúa:</div>
-                <p class="text-xs text-notion-text leading-relaxed whitespace-pre-line">${escapeHtml(item.content)}</p>
-              </div>
-            </div>
-          `;
-        }
-        // 4. Image Block
-        else if (item.type === 'image') {
-          innerContent = `
-            <div class="space-y-2">
-              <div class="overflow-hidden rounded-xl border border-notion-border bg-black/5">
-                <img src="${item.image}" loading="lazy" class="w-full max-h-[460px] object-cover">
-              </div>
-              ${item.content ? `<p class="text-[11px] text-notion-muted italic text-center font-serif">${escapeHtml(item.content)}</p>` : ''}
-            </div>
-          `;
-        }
-
-        // Meta info & Nút xóa kiểu Notion (hiện khi rê chuột)
-        blockEl.innerHTML = `
-          ${innerContent}
-          <div class="block-actions opacity-0 flex items-center justify-between text-[10px] text-notion-muted mt-2 pt-1 border-t border-notion-border/40 transition">
-            <span class="flex items-center gap-1 font-mono">
-              <span class="w-1.5 h-1.5 rounded-full ${isCapoo ? 'bg-notion-blueDark' : 'bg-notion-pinkDark'}"></span>
-              ${escapeHtml(item.author)} • ${formatTime(item.createdAt)}
-            </span>
-            <button onclick="deleteBlock('${key}')" class="hover:text-red-500 transition px-1.5 py-0.5 rounded hover:bg-red-50">
-              <i class="fa-regular fa-trash-can"></i> Xóa khối
-            </button>
-          </div>
-        `;
-
-        canvasBlocks.appendChild(blockEl);
-      });
-    }
-
-    // Lắng nghe dữ liệu Notion Realtime
-    db.ref('notion_blocks').on('value', (snapshot) => {
-      syncStatus.textContent = "Live Synced ✨";
-      renderCanvas(snapshot.val());
-    }, (error) => {
-      syncStatus.textContent = "Lỗi kết nối!";
-      console.error(error);
-    });
-
-    // Thêm Block mới
-    addBlockBtn.addEventListener('click', async () => {
-      const author = document.querySelector('input[name="activeAuthor"]:checked').value;
       const type = blockType.value;
       const content = blockContent.value.trim();
 
       if (type === 'image' && !base64Image) {
-        alert("Vui lòng chọn ảnh trước khi bấm thêm!");
+        alert("Vui lòng chọn ảnh trước khi bấm đăng!");
         return;
       }
       if (type !== 'image' && !content) {
@@ -488,30 +520,122 @@
       addBlockBtn.disabled = true;
 
       try {
-        const newBlock = {
-          author,
+        await db.ref('notion_duo_blocks').push({
+          authorId: currentUser.id,
+          authorName: currentUser.name,
           type,
           content: content || null,
           image: base64Image || null,
           completed: false,
           createdAt: Date.now()
-        };
-
-        await db.ref('notion_blocks').push(newBlock);
+        });
 
         // Reset
         blockContent.value = '';
         base64Image = null;
         imagePicker.value = '';
-        imgPickerLabel.textContent = "Chọn ảnh chèn vào trang...";
+        imgPickerLabel.textContent = "Chọn ảnh từ máy...";
         imgPreviewBox.innerHTML = '';
         imgPreviewBox.classList.add('hidden');
 
       } catch (err) {
-        alert("Lỗi khi thêm block: " + err.message);
+        alert("Lỗi khi đăng bài: " + err.message);
       } finally {
         addBlockBtn.disabled = false;
       }
+    });
+
+    // =========================================================================
+    // 6. RENDER 2 CỘT DUAL-FEED (CAPOO VS PRINCESS)
+    // =========================================================================
+    const capooFeed = document.getElementById('capooFeed');
+    const princessFeed = document.getElementById('princessFeed');
+    const capooCount = document.getElementById('capooCount');
+    const princessCount = document.getElementById('princessCount');
+
+    let latestSnapshotData = null;
+
+    function renderCardHTML(key, item) {
+      const isOwner = currentUser && currentUser.id === item.authorId;
+      const isCapoo = item.authorId === 'capoo';
+      const cardBg = isCapoo ? 'bg-white border-notion-blueBorder/80' : 'bg-white border-notion-pinkBorder/80';
+
+      let bodyHtml = '';
+      if (item.type === 'text') {
+        bodyHtml = `<p class="text-xs leading-relaxed text-notion-text whitespace-pre-line">${escapeHtml(item.content)}</p>`;
+      } else if (item.type === 'todo') {
+        bodyHtml = `
+          <div class="flex items-start gap-2.5">
+            <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleTodo('${key}', ${item.completed})" class="notion-checkbox mt-0.5">
+            <span class="text-xs ${item.completed ? 'line-through text-notion-muted' : 'text-notion-text'} transition">${escapeHtml(item.content)}</span>
+          </div>`;
+      } else if (item.type === 'callout') {
+        bodyHtml = `
+          <div class="p-3 ${isCapoo ? 'bg-notion-blueBg text-notion-blueDark' : 'bg-notion-pinkBg text-notion-pinkDark'} rounded-xl text-xs flex items-start gap-2">
+            <span>${isCapoo ? '🐱' : '👑'}</span>
+            <p class="leading-relaxed whitespace-pre-line">${escapeHtml(item.content)}</p>
+          </div>`;
+      } else if (item.type === 'image') {
+        bodyHtml = `
+          <div class="space-y-2">
+            <img src="${item.image}" loading="lazy" class="w-full max-h-80 object-cover rounded-xl border border-notion-border">
+            ${item.content ? `<p class="text-[11px] text-notion-muted italic font-serif text-center">${escapeHtml(item.content)}</p>` : ''}
+          </div>`;
+      }
+
+      // Action bar: Dual Time + Delete button (chỉ hiện cho chủ bài viết)
+      return `
+        <article class="glass-card rounded-2xl p-4 border ${cardBg} shadow-sm transition hover:shadow">
+          ${bodyHtml}
+          <div class="flex items-center justify-between text-[10px] text-notion-muted mt-3 pt-2 border-t border-notion-border/50 font-mono">
+            <div class="flex items-center gap-1">${formatDualTime(item.createdAt)}</div>
+            ${isOwner ? `
+              <button onclick="deleteBlock('${key}', '${item.authorId}')" class="text-red-400 hover:text-red-600 transition px-1 py-0.5 rounded hover:bg-red-50" title="Chỉ bạn mới có quyền xóa">
+                <i class="fa-regular fa-trash-can"></i> Xóa
+              </button>` : ''}
+          </div>
+        </article>
+      `;
+    }
+
+    function renderDualColumns(data) {
+      latestSnapshotData = data;
+      const keys = Object.keys(data || {});
+
+      let capooCards = [];
+      let princessCards = [];
+
+      keys.forEach(key => {
+        const item = data[key];
+        if (item.authorId === 'capoo') {
+          capooCards.push(renderCardHTML(key, item));
+        } else {
+          princessCards.push(renderCardHTML(key, item));
+        }
+      });
+
+      // Render góc Capoo
+      capooCount.textContent = `${capooCards.length} mẩu`;
+      if (capooCards.length === 0) {
+        capooFeed.innerHTML = `<div class="text-center py-12 bg-white/40 rounded-2xl border border-dashed border-notion-blueBorder text-xs text-notion-muted">Capoo chưa gửi mẩu chuyện nào 🐱🍖</div>`;
+      } else {
+        capooFeed.innerHTML = capooCards.reverse().join('');
+      }
+
+      // Render góc Công Chúa
+      princessCount.textContent = `${princessCards.length} mẩu`;
+      if (princessCards.length === 0) {
+        princessFeed.innerHTML = `<div class="text-center py-12 bg-white/40 rounded-2xl border border-dashed border-notion-pinkBorder text-xs text-notion-muted">Công Chúa chưa gửi mẩu chuyện nào 👑🎀</div>`;
+      } else {
+        princessFeed.innerHTML = princessCards.reverse().join('');
+      }
+    }
+
+    // Lắng nghe Realtime
+    db.ref('notion_duo_blocks').on('value', (snapshot) => {
+      renderDualColumns(snapshot.val());
+    }, (error) => {
+      console.error(error);
     });
   </script>
 </body>
