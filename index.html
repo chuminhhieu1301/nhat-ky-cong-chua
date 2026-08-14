@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>chérie • capu & me</title>
+  <title>chérie • capoo & me</title>
 
   <!-- Google Fonts: Editorial Serif & Minimal Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Alex+Brush&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Alex+Brush&display=swap" rel="stylesheet">
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,6 +27,12 @@
               400: '#D67E77',
               500: '#C25952',
               dark: '#4A2828'
+            },
+            capoo: {
+              light: '#E6F4FE',
+              DEFAULT: '#8EC5FC',
+              dark: '#4B9CD3',
+              accent: '#3A86C8'
             }
           },
           fontFamily: {
@@ -43,15 +49,15 @@
     body {
       background-color: #FAF5F2;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(245, 228, 226, 0.6) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(236, 197, 193, 0.4) 0px, transparent 50%),
+        radial-gradient(at 0% 0%, rgba(245, 228, 226, 0.7) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(230, 244, 254, 0.6) 0px, transparent 50%),
         radial-gradient(at 50% 50%, rgba(253, 247, 244, 0.8) 0px, transparent 100%);
       min-height: 100vh;
       color: #4A3B39;
     }
 
     .glass-box {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.75);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.9);
@@ -61,20 +67,28 @@
     .editorial-border {
       border: 1px solid rgba(214, 126, 119, 0.2);
     }
+
+    /* Hiệu ứng nhún nhảy nhẹ của Capoo */
+    @keyframes capooWiggle {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-4px) rotate(3deg); }
+    }
+    .capoo-bounce {
+      animation: capooWiggle 3s ease-in-out infinite;
+    }
   </style>
 
-  <!-- Firebase SDK (Chỉ dùng Realtime Database, 100% Miễn phí) -->
+  <!-- Firebase SDK (Realtime Database 100% Miễn phí) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 
 <body class="font-sans antialiased py-10 px-4 md:px-6">
 
-  <!-- Main Container -->
   <div class="max-w-2xl mx-auto">
 
     <!-- Header Section -->
-    <header class="text-center mb-10">
+    <header class="text-center mb-10 relative">
       <div class="inline-flex items-center justify-center space-x-2 text-xs tracking-widest uppercase font-semibold text-coquette-400 mb-2">
         <span>—</span>
         <span>Notre Journal Intime</span>
@@ -83,19 +97,19 @@
       
       <h1 class="font-serif text-4xl md:text-5xl font-semibold tracking-tight text-coquette-dark flex items-center justify-center gap-3">
         <span>chérie</span>
-        <span class="font-cursive text-3xl md:text-4xl text-coquette-300 transform -rotate-6">et</span>
-        <span>capu</span>
+        <span class="font-cursive text-3xl md:text-4xl text-capoo-dark transform -rotate-6">et</span>
+        <span>capoo</span>
       </h1>
       
       <p class="mt-2 text-xs text-coquette-dark/60 tracking-wider">
-        nơi lưu giữ những mẩu chuyện dịu dàng & kỷ niệm 🎀
+        nhật ký ngọt ngào của công chúa & chú mèo sâu bọ ham ăn 🍖🎀
       </p>
 
-      <!-- Mascot Badge -->
-      <div class="mt-4 inline-flex items-center gap-2 bg-white/80 editorial-border px-3.5 py-1 rounded-full shadow-sm text-xs text-coquette-500">
-        <span class="text-sm">🦫🎀</span>
-        <span class="tracking-wide font-medium">Capu's Corner • Relax & Sweet</span>
-        <span class="text-[10px]">✨</span>
+      <!-- Bugcat Capoo Badge -->
+      <div class="mt-4 inline-flex items-center gap-2 bg-white/80 editorial-border px-4 py-1.5 rounded-full shadow-sm text-xs text-coquette-500">
+        <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" alt="Bugcat Capoo" class="w-6 h-6 object-contain capoo-bounce">
+        <span class="tracking-wide font-medium text-capoo-dark">Bugcat Capoo's Sanctuary</span>
+        <span class="text-xs">🍖✨</span>
       </div>
     </header>
 
@@ -103,55 +117,55 @@
     <section class="glass-box rounded-3xl p-6 md:p-8 mb-12 relative transition-all duration-300">
       <form id="entryForm" class="space-y-5">
         
-        <!-- Toggle Tác giả -->
+        <!-- Toggle Tác giả: Capoo & Princess -->
         <div>
           <label class="block text-[11px] font-semibold uppercase tracking-widest text-coquette-dark/70 mb-2">
             Ai đang viết thế? 🪞
           </label>
           <div class="grid grid-cols-2 gap-3">
             <label class="cursor-pointer">
-              <input type="radio" name="author" value="Capu 🦫🎀" checked class="peer hidden">
-              <div class="p-2.5 text-center rounded-2xl border border-coquette-200/80 bg-white/40 text-xs font-medium text-coquette-dark peer-checked:bg-coquette-100 peer-checked:border-coquette-400 peer-checked:font-semibold transition-all">
-                🦫 Capu thư thái
+              <input type="radio" name="author" value="Bugcat Capoo 🐱🐛" checked class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-capoo-light bg-white/40 text-xs font-medium text-capoo-dark peer-checked:bg-capoo-light peer-checked:border-capoo-dark peer-checked:font-semibold transition-all flex items-center justify-center gap-2">
+                <span>🐱🐛 Capoo đói bụng</span>
               </div>
             </label>
             <label class="cursor-pointer">
-              <input type="radio" name="author" value="Princess 👑" class="peer hidden">
-              <div class="p-2.5 text-center rounded-2xl border border-coquette-200/80 bg-white/40 text-xs font-medium text-coquette-dark peer-checked:bg-coquette-100 peer-checked:border-coquette-400 peer-checked:font-semibold transition-all">
-                👑 Công chúa nhỏ
+              <input type="radio" name="author" value="Princess 👑🎀" class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-coquette-200/80 bg-white/40 text-xs font-medium text-coquette-dark peer-checked:bg-coquette-100 peer-checked:border-coquette-400 peer-checked:font-semibold transition-all flex items-center justify-center gap-2">
+                <span>👑 Công chúa nhỏ</span>
               </div>
             </label>
           </div>
         </div>
 
-        <!-- Mood Selection -->
+        <!-- Mood & Tags phong cách Capoo -->
         <div>
           <label class="block text-[11px] font-semibold uppercase tracking-widest text-coquette-dark/70 mb-2">
-            Cảm xúc hôm nay
+            Tâm trạng lúc này
           </label>
           <div class="flex flex-wrap gap-2 text-xs">
             <label class="cursor-pointer">
-              <input type="radio" name="mood" value="☕ Thong thả" checked class="peer hidden">
-              <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-coquette-400 peer-checked:text-white peer-checked:border-coquette-400 transition text-[11px]">
-                ☕ Thong thả
+              <input type="radio" name="mood" value="🍖 Thèm ăn thịt" checked class="peer hidden">
+              <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-capoo-dark peer-checked:text-white peer-checked:border-capoo-dark transition text-[11px]">
+                🍖 Thèm thịt
               </span>
             </label>
             <label class="cursor-pointer">
-              <input type="radio" name="mood" value="🎀 Rất nhớ" class="peer hidden">
+              <input type="radio" name="mood" value="🎀 Rất nhớ bạn" class="peer hidden">
               <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-coquette-400 peer-checked:text-white peer-checked:border-coquette-400 transition text-[11px]">
-                🎀 Rất nhớ
+                🎀 Rất nhớ bạn
               </span>
             </label>
             <label class="cursor-pointer">
-              <input type="radio" name="mood" value="🍰 Ngọt ngào" class="peer hidden">
+              <input type="radio" name="mood" value="💤 Muốn ngủ nướng" class="peer hidden">
               <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-coquette-400 peer-checked:text-white peer-checked:border-coquette-400 transition text-[11px]">
-                🍰 Ngọt ngào
+                💤 Muốn ngủ
               </span>
             </label>
             <label class="cursor-pointer">
-              <input type="radio" name="mood" value="🌷 Chuyện nhỏ" class="peer hidden">
+              <input type="radio" name="mood" value="🌸 Hôm nay vui vẻ" class="peer hidden">
               <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-coquette-400 peer-checked:text-white peer-checked:border-coquette-400 transition text-[11px]">
-                🌷 Chuyện nhỏ
+                🌸 Vui vẻ
               </span>
             </label>
           </div>
@@ -166,21 +180,20 @@
             id="messageInput" 
             rows="3" 
             required
-            placeholder="Hôm nay của bạn thế nào? Hãy viết một vài dòng gửi cho người kia nhé..." 
+            placeholder="Kể cho Capoo hoặc công chúa nghe hôm nay có gì đặc biệt nào..." 
             class="w-full px-4 py-3.5 rounded-2xl bg-white/70 border border-coquette-200/80 focus:border-coquette-400 focus:bg-white focus:outline-none text-xs leading-relaxed transition"
           ></textarea>
         </div>
 
-        <!-- Media Attachment (Đính kèm ảnh / Dán link video) -->
+        <!-- Media Attachment -->
         <div class="space-y-3 pt-1">
           <div class="flex items-center justify-between">
             <label class="text-[11px] font-semibold uppercase tracking-widest text-coquette-dark/70">
               Đính kèm kỷ niệm
             </label>
-            <span class="text-[10px] text-coquette-400">Tự động tối ưu ảnh ✨</span>
+            <span class="text-[10px] text-coquette-400">Tự động nén ảnh nét & nhẹ ✨</span>
           </div>
 
-          <!-- Nút chọn ảnh từ thiết bị -->
           <div class="flex items-center space-x-3">
             <label for="imageFileInput" class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 bg-white rounded-xl editorial-border text-xs text-coquette-dark/80 hover:bg-coquette-50 transition shadow-sm">
               <i class="fa-regular fa-image text-coquette-400"></i>
@@ -192,27 +205,23 @@
             </button>
           </div>
 
-          <!-- Input dán link Video / Nhạc / Ảnh Web (Tùy chọn) -->
           <div>
             <input 
               type="url" 
               id="mediaUrlInput" 
-              placeholder="Hoặc dán link video (YouTube/mp4) hoặc ảnh online tại đây..." 
+              placeholder="Hoặc dán link video (YouTube/mp4) hoặc ảnh gif Capoo online..." 
               class="w-full px-3.5 py-2 rounded-xl bg-white/60 border border-coquette-200/60 focus:border-coquette-400 focus:bg-white focus:outline-none text-[11px] transition"
             >
           </div>
 
-          <!-- Preview Box -->
-          <div id="imagePreview" class="hidden pt-2">
-            <!-- Render xem trước ảnh -->
-          </div>
+          <div id="imagePreview" class="hidden pt-2"></div>
         </div>
 
         <!-- Submit Button -->
         <button 
           type="submit" 
           id="submitBtn"
-          class="w-full py-3.5 bg-coquette-400 hover:bg-coquette-500 active:scale-[0.99] text-white font-medium text-xs tracking-wider uppercase rounded-2xl shadow-sm transition duration-200 flex items-center justify-center space-x-2"
+          class="w-full py-3.5 bg-gradient-to-r from-coquette-400 to-coquette-500 hover:from-coquette-500 hover:to-coquette-400 active:scale-[0.99] text-white font-medium text-xs tracking-wider uppercase rounded-2xl shadow-sm transition duration-200 flex items-center justify-center space-x-2"
         >
           <span>Gửi vào trang nhật ký</span>
           <span class="text-sm">💌</span>
@@ -220,14 +229,14 @@
       </form>
     </section>
 
-    <!-- Entries Feed -->
+    <!-- Timeline Entries -->
     <section>
       <div class="flex items-center justify-between mb-6 px-1 border-b border-coquette-200/50 pb-3">
         <h2 class="font-serif text-2xl font-semibold text-coquette-dark flex items-center gap-2">
           <span>Mémoires</span>
           <span id="postCount" class="text-xs font-sans font-normal px-2 py-0.5 bg-coquette-100 text-coquette-dark rounded-full">0</span>
         </h2>
-        <span class="text-[11px] text-coquette-dark/50 italic font-serif">synced in real-time</span>
+        <span class="text-[11px] text-coquette-dark/50 italic font-serif">synced with capoo & you</span>
       </div>
 
       <div id="postsList" class="space-y-6">
@@ -240,12 +249,11 @@
 
     <!-- Footer -->
     <footer class="text-center mt-20 text-[11px] text-coquette-dark/40 tracking-widest uppercase">
-      <p>Capu & Princess • Minimalist Coquette Archive</p>
+      <p>Bugcat Capoo & Princess • Minimalist Archive</p>
     </footer>
 
   </div>
 
-  <!-- JavaScript Code -->
   <script>
     // =========================================================================
     // CẤU HÌNH FIREBASE REALTIME DATABASE (PRINCESSMEOMEO - SINGAPORE)
@@ -277,7 +285,7 @@
 
     let compressedImageBase64 = null;
 
-    // Hàm nén ảnh sang định dạng JPEG nhẹ trước khi lưu
+    // Nén ảnh sang JPEG nhẹ
     function compressImage(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -287,7 +295,7 @@
           img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const maxWidth = 1000; // Chiều rộng tối đa chuẩn nét và nhẹ
+            const maxWidth = 1000;
             let width = img.width;
             let height = img.height;
 
@@ -301,7 +309,6 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
 
-            // Nén chất lượng 0.7 (giảm 90% dung lượng)
             const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
             resolve(dataUrl);
           };
@@ -311,13 +318,12 @@
       });
     }
 
-    // Xử lý khi người dùng chọn ảnh
     imageFileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
 
       try {
-        fileLabel.textContent = 'Đang xử lý ảnh...';
+        fileLabel.textContent = 'Đang nén ảnh...';
         compressedImageBase64 = await compressImage(file);
         
         fileLabel.textContent = file.name.length > 18 ? file.name.substring(0, 15) + '...' : file.name;
@@ -325,7 +331,7 @@
         imagePreview.classList.remove('hidden');
         imagePreview.innerHTML = `<img src="${compressedImageBase64}" class="max-h-48 rounded-xl object-cover border border-coquette-200 shadow-sm">`;
       } catch (err) {
-        alert("Không thể đọc ảnh, vui lòng thử ảnh khác!");
+        alert("Không thể đọc ảnh, vui lòng thử lại!");
         removeFileBtn.click();
       }
     });
@@ -354,13 +360,18 @@
       return div.innerHTML;
     }
 
-    // Thả tim bài viết
+    // Reaction: Tim hoặc Cho Capoo ăn thịt 🍖
     window.reactHeart = function(key) {
       const entryRef = db.ref(`diary_entries/${key}/hearts`);
       entryRef.transaction((current) => (current || 0) + 1);
     };
 
-    // Render danh sách nhật ký
+    window.reactMeat = function(key) {
+      const entryRef = db.ref(`diary_entries/${key}/meats`);
+      entryRef.transaction((current) => (current || 0) + 1);
+    };
+
+    // Render danh sách
     function renderFeed(entries) {
       postsList.innerHTML = '';
       const keys = Object.keys(entries || {}).reverse();
@@ -369,9 +380,9 @@
       if (keys.length === 0) {
         postsList.innerHTML = `
           <div class="text-center py-16 bg-white/40 rounded-3xl editorial-border p-8">
-            <p class="text-3xl mb-2">🦫🌷</p>
+            <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" class="w-16 h-16 mx-auto mb-2 opacity-80" alt="Capoo">
             <p class="font-serif text-lg text-coquette-dark">Chưa có mẩu tâm sự nào...</p>
-            <p class="text-xs text-coquette-dark/60 mt-1">Capu & bạn hãy là người mở đầu trang sách đầu tiên nhé.</p>
+            <p class="text-xs text-coquette-dark/60 mt-1">Capoo & Công chúa hãy là người viết trang nhật ký đầu tiên nhé 🍖</p>
           </div>
         `;
         return;
@@ -379,12 +390,11 @@
 
       keys.forEach(key => {
         const item = entries[key];
-        const isCapu = item.author && item.author.includes('Capu');
+        const isCapoo = item.author && item.author.includes('Capoo');
         
         const card = document.createElement('article');
         card.className = "glass-box rounded-3xl p-6 relative transition hover:shadow-md";
 
-        // Media HTML (Ảnh đính kèm hoặc Link ngoài)
         let mediaHtml = '';
         if (item.image) {
           mediaHtml = `
@@ -397,7 +407,7 @@
             let videoId = url.includes('youtu.be') ? url.split('/').pop() : url.split('v=')[1]?.split('&')[0];
             mediaHtml = `
               <div class="mt-3 overflow-hidden rounded-2xl border border-coquette-100 aspect-video">
-                <iframe src="https://www.youtube.com/embed/${videoId}" class="w-full h-full" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/${videoId}" class="w-full h-full rounded-2xl" allowfullscreen></iframe>
               </div>`;
           } else if (url.match(/\.(mp4|webm)$/i)) {
             mediaHtml = `
@@ -415,16 +425,16 @@
         card.innerHTML = `
           <div class="flex items-center justify-between border-b border-coquette-100/60 pb-3 mb-3">
             <div class="flex items-center space-x-2.5">
-              <span class="w-7 h-7 rounded-full bg-coquette-100 flex items-center justify-center text-xs">
-                ${isCapu ? '🦫' : '👑'}
+              <span class="w-7 h-7 rounded-full ${isCapoo ? 'bg-capoo-light text-capoo-dark' : 'bg-coquette-100 text-coquette-dark'} flex items-center justify-center text-xs">
+                ${isCapoo ? '🐱🐛' : '👑'}
               </span>
               <div>
-                <span class="text-xs font-semibold text-coquette-dark">${escapeHtml(item.author || '')}</span>
+                <span class="text-xs font-semibold ${isCapoo ? 'text-capoo-dark' : 'text-coquette-dark'}">${escapeHtml(item.author || '')}</span>
                 <span class="text-[10px] text-coquette-dark/40 ml-2 font-mono">${formatTime(item.createdAt)}</span>
               </div>
             </div>
             <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-white editorial-border text-coquette-500 font-medium">
-              ${escapeHtml(item.mood || '☕')}
+              ${escapeHtml(item.mood || '🍖')}
             </span>
           </div>
 
@@ -432,7 +442,12 @@
 
           ${mediaHtml}
 
+          <!-- Reactions: Tim & Thịt Capoo -->
           <div class="mt-4 pt-2 flex items-center justify-end space-x-2">
+            <button onclick="reactMeat('${key}')" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 editorial-border text-xs text-capoo-dark hover:bg-capoo-light transition active:scale-95">
+              <span>🍖</span>
+              <span class="text-[11px] font-semibold">${item.meats || 0}</span>
+            </button>
             <button onclick="reactHeart('${key}')" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 editorial-border text-xs text-coquette-400 hover:text-coquette-500 hover:bg-coquette-50 transition active:scale-95">
               <span>💖</span>
               <span class="text-[11px] font-semibold">${item.hearts || 0}</span>
@@ -443,14 +458,14 @@
       });
     }
 
-    // Lắng nghe dữ liệu
+    // Lắng nghe realtime
     db.ref('diary_entries').on('value', (snapshot) => {
       renderFeed(snapshot.val());
     }, (error) => {
       postsList.innerHTML = `<div class="text-center text-xs text-red-500 p-4">Lỗi kết nối: ${error.message}</div>`;
     });
 
-    // Xử lý gửi bài
+    // Submit
     entryForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const author = document.querySelector('input[name="author"]:checked').value;
@@ -471,10 +486,10 @@
           image: compressedImageBase64 || null,
           externalUrl: externalUrl || null,
           hearts: 0,
+          meats: 0,
           createdAt: Date.now()
         });
 
-        // Reset form sau khi gửi
         entryForm.reset();
         removeFileBtn.click();
         mediaUrlInput.value = '';
