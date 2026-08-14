@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>👑 Vương Quốc Nhật Ký Công Chúa ✨</title>
   
-  <!-- Font chữ dễ thương & Icon -->
+  <!-- Font chữ & Icon -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Dancing+Script:wght@700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
@@ -73,14 +73,14 @@
     }
   </style>
 
-  <!-- Firebase SDK Compat -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 
 <body class="font-cute text-gray-700 relative overflow-x-hidden pb-16">
 
-  <!-- Background Animated Emojis -->
+  <!-- Background Animated Icons -->
   <div class="heart-bg text-2xl" style="left: 10%; animation-duration: 8s;">🌸</div>
   <div class="heart-bg text-3xl" style="left: 25%; animation-duration: 12s; animation-delay: 2s;">💖</div>
   <div class="heart-bg text-xl" style="left: 55%; animation-duration: 10s; animation-delay: 4s;">✨</div>
@@ -209,12 +209,12 @@
 
   <script>
     // =========================================================================
-    // CẤU HÌNH FIREBASE CHUẨN XÁC DỰ ÁN PRINCESSMEOMEO
+    // CẤU HÌNH CHUẨN XÁC FIREBASE CHO PRINCESSMEOMEO (SERVER SINGAPORE)
     // =========================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyApXsxyEbrH9W30KVyINT9_H3VXqP8Ko5Y",
       authDomain: "princessmeomeo.firebaseapp.com",
-      databaseURL: "https://princessmeomeo-default-rtdb.firebaseio.com",
+      databaseURL: "https://princessmeomeo-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "princessmeomeo",
       storageBucket: "princessmeomeo.firebasestorage.app",
       messagingSenderId: "240385247065",
@@ -222,7 +222,7 @@
       measurementId: "G-L4L79M7BMQ"
     };
 
-    // Khởi tạo Firebase
+    // Khởi tạo Firebase Realtime Database
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
@@ -281,7 +281,7 @@
       return div.innerHTML;
     }
 
-    // Lắng nghe dữ liệu
+    // Lắng nghe dữ liệu realtime
     db.ref('diary_entries').on('value', (snapshot) => {
       const data = snapshot.val();
       renderPosts(data);
