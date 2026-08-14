@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>👑 Vương Quốc Nhật Ký Công Chúa ✨</title>
-  
-  <!-- Font chữ & Icon -->
+  <title>chérie • capu & me</title>
+
+  <!-- Google Fonts: Editorial Serif & Minimal Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Dancing+Script:wght@700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Alex+Brush&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -17,21 +18,21 @@
       theme: {
         extend: {
           colors: {
-            princess: {
-              50: '#fff0f5',
-              100: '#ffe4e1',
-              200: '#ffccd5',
-              300: '#ffb3c1',
-              400: '#ff809b',
-              500: '#ff4d6d',
-              accent: '#ffb703',
-              dark: '#590d22'
+            rosewater: '#FDF7F4',
+            coquette: {
+              50: '#FAF2F0',
+              100: '#F5E4E2',
+              200: '#ECC5C1',
+              300: '#E2A59F',
+              400: '#D67E77',
+              500: '#C25952',
+              dark: '#4A2828'
             }
           },
           fontFamily: {
-            cute: ['Quicksand', 'sans-serif'],
-            hand: ['Dancing Script', 'cursive'],
-            bubble: ['Comfortaa', 'cursive']
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Cormorant Garamond"', 'serif'],
+            cursive: ['"Alex Brush"', 'cursive']
           }
         }
       }
@@ -40,176 +41,214 @@
 
   <style>
     body {
-      background: linear-gradient(135deg, #fff0f5 0%, #ffdde1 50%, #ee9ca7 100%);
+      background-color: #FAF5F2;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(245, 228, 226, 0.6) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(236, 197, 193, 0.4) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(253, 247, 244, 0.8) 0px, transparent 100%);
       min-height: 100vh;
+      color: #4A3B39;
     }
-    .princess-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      border: 2px solid #ffccd5;
-      box-shadow: 0 10px 25px -5px rgba(255, 128, 155, 0.25);
+
+    .glass-box {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 12px 36px -8px rgba(194, 89, 82, 0.08);
     }
-    .diary-note {
-      background: #ffffff;
-      border: 2px dashed #ffccd5;
-      transition: all 0.3s ease;
-    }
-    .diary-note:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 20px -3px rgba(255, 77, 109, 0.2);
-    }
-    @keyframes float {
-      0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
-    }
-    .heart-bg {
-      position: fixed;
-      bottom: -20px;
-      user-select: none;
-      pointer-events: none;
-      animation: float 12s linear infinite;
-      z-index: 0;
-      color: rgba(255, 128, 155, 0.3);
+
+    .editorial-border {
+      border: 1px solid rgba(214, 126, 119, 0.2);
     }
   </style>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK (Chỉ dùng Realtime Database, 100% Miễn phí) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 
-<body class="font-cute text-gray-700 relative overflow-x-hidden pb-16">
+<body class="font-sans antialiased py-10 px-4 md:px-6">
 
-  <!-- Background Animated Icons -->
-  <div class="heart-bg text-2xl" style="left: 10%; animation-duration: 8s;">🌸</div>
-  <div class="heart-bg text-3xl" style="left: 25%; animation-duration: 12s; animation-delay: 2s;">💖</div>
-  <div class="heart-bg text-xl" style="left: 55%; animation-duration: 10s; animation-delay: 4s;">✨</div>
-  <div class="heart-bg text-3xl" style="left: 80%; animation-duration: 14s; animation-delay: 1s;">🎀</div>
+  <!-- Main Container -->
+  <div class="max-w-2xl mx-auto">
 
-  <div class="max-w-3xl mx-auto px-4 pt-10 relative z-10">
-
-    <!-- Header -->
+    <!-- Header Section -->
     <header class="text-center mb-10">
-      <div class="inline-block animate-bounce mb-2">
-        <span class="text-5xl">👑</span>
+      <div class="inline-flex items-center justify-center space-x-2 text-xs tracking-widest uppercase font-semibold text-coquette-400 mb-2">
+        <span>—</span>
+        <span>Notre Journal Intime</span>
+        <span>—</span>
       </div>
-      <h1 class="text-4xl md:text-5xl font-hand font-bold text-princess-500 drop-shadow-sm">
-        Princess Secret Diary
+      
+      <h1 class="font-serif text-4xl md:text-5xl font-semibold tracking-tight text-coquette-dark flex items-center justify-center gap-3">
+        <span>chérie</span>
+        <span class="font-cursive text-3xl md:text-4xl text-coquette-300 transform -rotate-6">et</span>
+        <span>capu</span>
       </h1>
-      <p class="mt-2 text-sm md:text-base text-princess-dark font-medium">
-        ✨ Gửi gắm một mẩu tâm tư, niềm vui hay lời chúc ngọt ngào vào đây nhé! 🎀
+      
+      <p class="mt-2 text-xs text-coquette-dark/60 tracking-wider">
+        nơi lưu giữ những mẩu chuyện dịu dàng & kỷ niệm 🎀
       </p>
+
+      <!-- Mascot Badge -->
+      <div class="mt-4 inline-flex items-center gap-2 bg-white/80 editorial-border px-3.5 py-1 rounded-full shadow-sm text-xs text-coquette-500">
+        <span class="text-sm">🦫🎀</span>
+        <span class="tracking-wide font-medium">Capu's Corner • Relax & Sweet</span>
+        <span class="text-[10px]">✨</span>
+      </div>
     </header>
 
-    <!-- Form viết nhật ký -->
-    <div class="princess-card rounded-3xl p-6 md:p-8 mb-12 relative">
-      <div class="absolute -top-4 right-8 bg-princess-400 text-white text-xs px-3 py-1 rounded-full font-bold shadow">
-        📝 Viết thư gửi công chúa
-      </div>
-
-      <form id="diaryForm" class="space-y-4">
+    <!-- Editor Form -->
+    <section class="glass-box rounded-3xl p-6 md:p-8 mb-12 relative transition-all duration-300">
+      <form id="entryForm" class="space-y-5">
+        
+        <!-- Toggle Tác giả -->
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-princess-500 mb-1">
-            🌸 Tên của bạn / Biệt danh đáng yêu
+          <label class="block text-[11px] font-semibold uppercase tracking-widest text-coquette-dark/70 mb-2">
+            Ai đang viết thế? 🪞
           </label>
-          <input 
-            type="text" 
-            id="authorInput" 
-            required
-            placeholder="Ví dụ: Nàng Thơ, Bé Dâu Tây, Hoàng Tử..." 
-            class="w-full px-4 py-3 rounded-2xl border-2 border-princess-200 focus:border-princess-400 focus:outline-none bg-white/90 text-sm transition"
-          >
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-princess-500 mb-1">
-            🎀 Cảm xúc lúc này
-          </label>
-          <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 text-xs font-medium">
+          <div class="grid grid-cols-2 gap-3">
             <label class="cursor-pointer">
-              <input type="radio" name="mood" value="💖 Ngọt ngào" checked class="peer hidden">
-              <div class="p-2 text-center rounded-xl border border-princess-200 peer-checked:bg-princess-200 peer-checked:border-princess-400 peer-checked:font-bold transition">
-                💖 Ngọt ngào
+              <input type="radio" name="author" value="Capu 🦫🎀" checked class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-coquette-200/80 bg-white/40 text-xs font-medium text-coquette-dark peer-checked:bg-coquette-100 peer-checked:border-coquette-400 peer-checked:font-semibold transition-all">
+                🦫 Capu thư thái
               </div>
             </label>
             <label class="cursor-pointer">
-              <input type="radio" name="mood" value="✨ Hạnh phúc" class="peer hidden">
-              <div class="p-2 text-center rounded-xl border border-princess-200 peer-checked:bg-princess-200 peer-checked:border-princess-400 peer-checked:font-bold transition">
-                ✨ Hạnh phúc
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input type="radio" name="mood" value="🌸 Chill chill" class="peer hidden">
-              <div class="p-2 text-center rounded-xl border border-princess-200 peer-checked:bg-princess-200 peer-checked:border-princess-400 peer-checked:font-bold transition">
-                🌸 Chill chill
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input type="radio" name="mood" value="💭 Mơ mộng" class="peer hidden">
-              <div class="p-2 text-center rounded-xl border border-princess-200 peer-checked:bg-princess-200 peer-checked:border-princess-400 peer-checked:font-bold transition">
-                💭 Mơ mộng
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input type="radio" name="mood" value="🌙 Tâm sự" class="peer hidden">
-              <div class="p-2 text-center rounded-xl border border-princess-200 peer-checked:bg-princess-200 peer-checked:border-princess-400 peer-checked:font-bold transition">
-                🌙 Tâm sự
+              <input type="radio" name="author" value="Princess 👑" class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-coquette-200/80 bg-white/40 text-xs font-medium text-coquette-dark peer-checked:bg-coquette-100 peer-checked:border-coquette-400 peer-checked:font-semibold transition-all">
+                👑 Công chúa nhỏ
               </div>
             </label>
           </div>
         </div>
 
+        <!-- Mood Selection -->
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-princess-500 mb-1">
-            💌 Lời nhắn gửi / Trang nhật ký
+          <label class="block text-[11px] font-semibold uppercase tracking-widest text-coquette-dark/70 mb-2">
+            Cảm xúc hôm nay
+          </label>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <label class="cursor-pointer">
+              <input type="radio" name="mood" value="☕ Thong thả" checked class="peer hidden">
+              <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-coquette-400 peer-checked:text-white peer-checked:border-coquette-400 transition text-[11px]">
+                ☕ Thong thả
+              </span>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="mood" value="🎀 Rất nhớ" class="peer hidden">
+              <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-coquette-400 peer-checked:text-white peer-checked:border-coquette-400 transition text-[11px]">
+                🎀 Rất nhớ
+              </span>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="mood" value="🍰 Ngọt ngào" class="peer hidden">
+              <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-coquette-400 peer-checked:text-white peer-checked:border-coquette-400 transition text-[11px]">
+                🍰 Ngọt ngào
+              </span>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="mood" value="🌷 Chuyện nhỏ" class="peer hidden">
+              <span class="px-3 py-1.5 rounded-full border border-coquette-200 bg-white/50 inline-block peer-checked:bg-coquette-400 peer-checked:text-white peer-checked:border-coquette-400 transition text-[11px]">
+                🌷 Chuyện nhỏ
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Text Area -->
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-widest text-coquette-dark/70 mb-2">
+            Trang nhật ký
           </label>
           <textarea 
             id="messageInput" 
             rows="3" 
             required
-            placeholder="Hôm nay trời đẹp lắm, chúc công chúa luôn rạng rỡ và yêu đời nhen..." 
-            class="w-full px-4 py-3 rounded-2xl border-2 border-princess-200 focus:border-princess-400 focus:outline-none bg-white/90 text-sm transition"
+            placeholder="Hôm nay của bạn thế nào? Hãy viết một vài dòng gửi cho người kia nhé..." 
+            class="w-full px-4 py-3.5 rounded-2xl bg-white/70 border border-coquette-200/80 focus:border-coquette-400 focus:bg-white focus:outline-none text-xs leading-relaxed transition"
           ></textarea>
         </div>
 
+        <!-- Media Attachment (Đính kèm ảnh / Dán link video) -->
+        <div class="space-y-3 pt-1">
+          <div class="flex items-center justify-between">
+            <label class="text-[11px] font-semibold uppercase tracking-widest text-coquette-dark/70">
+              Đính kèm kỷ niệm
+            </label>
+            <span class="text-[10px] text-coquette-400">Tự động tối ưu ảnh ✨</span>
+          </div>
+
+          <!-- Nút chọn ảnh từ thiết bị -->
+          <div class="flex items-center space-x-3">
+            <label for="imageFileInput" class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 bg-white rounded-xl editorial-border text-xs text-coquette-dark/80 hover:bg-coquette-50 transition shadow-sm">
+              <i class="fa-regular fa-image text-coquette-400"></i>
+              <span id="fileLabel">Chọn ảnh từ máy...</span>
+            </label>
+            <input type="file" id="imageFileInput" accept="image/*" class="hidden">
+            <button type="button" id="removeFileBtn" class="hidden text-xs text-gray-400 hover:text-red-500">
+              <i class="fa-solid fa-xmark"></i> Hủy ảnh
+            </button>
+          </div>
+
+          <!-- Input dán link Video / Nhạc / Ảnh Web (Tùy chọn) -->
+          <div>
+            <input 
+              type="url" 
+              id="mediaUrlInput" 
+              placeholder="Hoặc dán link video (YouTube/mp4) hoặc ảnh online tại đây..." 
+              class="w-full px-3.5 py-2 rounded-xl bg-white/60 border border-coquette-200/60 focus:border-coquette-400 focus:bg-white focus:outline-none text-[11px] transition"
+            >
+          </div>
+
+          <!-- Preview Box -->
+          <div id="imagePreview" class="hidden pt-2">
+            <!-- Render xem trước ảnh -->
+          </div>
+        </div>
+
+        <!-- Submit Button -->
         <button 
           type="submit" 
           id="submitBtn"
-          class="w-full py-3.5 bg-gradient-to-r from-princess-400 to-princess-500 hover:from-princess-500 hover:to-princess-400 text-white font-bold rounded-2xl shadow-lg shadow-princess-300 transform active:scale-98 transition duration-200 flex items-center justify-center space-x-2"
+          class="w-full py-3.5 bg-coquette-400 hover:bg-coquette-500 active:scale-[0.99] text-white font-medium text-xs tracking-wider uppercase rounded-2xl shadow-sm transition duration-200 flex items-center justify-center space-x-2"
         >
-          <span>Gửi Ngay Vào Nhật Ký</span>
-          <span>💖</span>
+          <span>Gửi vào trang nhật ký</span>
+          <span class="text-sm">💌</span>
         </button>
       </form>
-    </div>
+    </section>
 
-    <!-- Danh sách nhật ký -->
-    <div>
-      <div class="flex items-center justify-between mb-6 px-2">
-        <h2 class="text-xl font-bold text-princess-dark flex items-center gap-2">
-          <span>📖 Hộp Thư Kỷ Niệm</span>
-          <span id="postCount" class="text-xs bg-princess-200 text-princess-500 px-2.5 py-0.5 rounded-full font-bold">0</span>
+    <!-- Entries Feed -->
+    <section>
+      <div class="flex items-center justify-between mb-6 px-1 border-b border-coquette-200/50 pb-3">
+        <h2 class="font-serif text-2xl font-semibold text-coquette-dark flex items-center gap-2">
+          <span>Mémoires</span>
+          <span id="postCount" class="text-xs font-sans font-normal px-2 py-0.5 bg-coquette-100 text-coquette-dark rounded-full">0</span>
         </h2>
-        <span class="text-xs text-princess-400">Tự động cập nhật tức thì ✨</span>
+        <span class="text-[11px] text-coquette-dark/50 italic font-serif">synced in real-time</span>
       </div>
 
-      <div id="postsList" class="space-y-4">
-        <div class="text-center py-12 text-princess-400 font-medium">
-          <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
-          <p class="text-sm">Đang mở hộp thư bí mật...</p>
+      <div id="postsList" class="space-y-6">
+        <div class="text-center py-16 text-coquette-300">
+          <i class="fa-solid fa-spinner fa-spin text-xl"></i>
+          <p class="text-xs mt-2 tracking-wide">Đang mở quyển nhật ký...</p>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="text-center mt-16 text-xs text-princess-dark/60">
-      <p>Made with 💖 for sweet memories | Hosted on GitHub Pages</p>
+    <footer class="text-center mt-20 text-[11px] text-coquette-dark/40 tracking-widest uppercase">
+      <p>Capu & Princess • Minimalist Coquette Archive</p>
     </footer>
+
   </div>
 
+  <!-- JavaScript Code -->
   <script>
     // =========================================================================
-    // CẤU HÌNH CHUẨN XÁC FIREBASE CHO PRINCESSMEOMEO (SERVER SINGAPORE)
+    // CẤU HÌNH FIREBASE REALTIME DATABASE (PRINCESSMEOMEO - SINGAPORE)
     // =========================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyApXsxyEbrH9W30KVyINT9_H3VXqP8Ko5Y",
@@ -222,57 +261,91 @@
       measurementId: "G-L4L79M7BMQ"
     };
 
-    // Khởi tạo Firebase Realtime Database
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const diaryForm = document.getElementById('diaryForm');
+    // DOM Elements
+    const entryForm = document.getElementById('entryForm');
     const postsList = document.getElementById('postsList');
     const postCount = document.getElementById('postCount');
+    const imageFileInput = document.getElementById('imageFileInput');
+    const fileLabel = document.getElementById('fileLabel');
+    const removeFileBtn = document.getElementById('removeFileBtn');
+    const imagePreview = document.getElementById('imagePreview');
+    const mediaUrlInput = document.getElementById('mediaUrlInput');
+    const submitBtn = document.getElementById('submitBtn');
 
-    function formatDate(timestamp) {
-      const d = new Date(timestamp);
-      return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')} • ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+    let compressedImageBase64 = null;
+
+    // Hàm nén ảnh sang định dạng JPEG nhẹ trước khi lưu
+    function compressImage(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxWidth = 1000; // Chiều rộng tối đa chuẩn nét và nhẹ
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Nén chất lượng 0.7 (giảm 90% dung lượng)
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+            resolve(dataUrl);
+          };
+          img.onerror = (err) => reject(err);
+        };
+        reader.onerror = (err) => reject(err);
+      });
     }
 
-    function renderPosts(posts) {
-      postsList.innerHTML = '';
-      const keys = Object.keys(posts || {}).reverse();
-      postCount.textContent = keys.length;
+    // Xử lý khi người dùng chọn ảnh
+    imageFileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-      if (keys.length === 0) {
-        postsList.innerHTML = `
-          <div class="text-center py-12 bg-white/60 rounded-3xl border border-princess-200 p-8 shadow-sm">
-            <p class="text-4xl mb-2">💌</p>
-            <p class="text-sm font-semibold text-princess-400">Chưa có lá thư nào ở đây...</p>
-            <p class="text-xs text-gray-500 mt-1">Hãy là người đầu tiên viết vào nhật ký này nhé!</p>
-          </div>
-        `;
-        return;
-      }
-
-      keys.forEach(key => {
-        const item = posts[key];
-        const card = document.createElement('div');
-        card.className = "diary-note rounded-3xl p-5 relative overflow-hidden";
+      try {
+        fileLabel.textContent = 'Đang xử lý ảnh...';
+        compressedImageBase64 = await compressImage(file);
         
-        card.innerHTML = `
-          <div class="flex items-center justify-between border-b border-princess-100 pb-2 mb-3">
-            <div class="flex items-center space-x-2">
-              <span class="w-8 h-8 rounded-full bg-princess-100 flex items-center justify-center text-sm">👑</span>
-              <div>
-                <h3 class="font-bold text-sm text-princess-dark">${escapeHtml(item.author)}</h3>
-                <span class="text-[10px] text-gray-400">${formatDate(item.createdAt)}</span>
-              </div>
-            </div>
-            <span class="text-xs bg-princess-50 text-princess-500 border border-princess-200 px-2.5 py-1 rounded-full font-medium">
-              ${escapeHtml(item.mood || '💖')}
-            </span>
-          </div>
-          <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">${escapeHtml(item.message)}</p>
-        `;
-        postsList.appendChild(card);
-      });
+        fileLabel.textContent = file.name.length > 18 ? file.name.substring(0, 15) + '...' : file.name;
+        removeFileBtn.classList.remove('hidden');
+        imagePreview.classList.remove('hidden');
+        imagePreview.innerHTML = `<img src="${compressedImageBase64}" class="max-h-48 rounded-xl object-cover border border-coquette-200 shadow-sm">`;
+      } catch (err) {
+        alert("Không thể đọc ảnh, vui lòng thử ảnh khác!");
+        removeFileBtn.click();
+      }
+    });
+
+    removeFileBtn.addEventListener('click', () => {
+      compressedImageBase64 = null;
+      imageFileInput.value = '';
+      fileLabel.textContent = 'Chọn ảnh từ máy...';
+      removeFileBtn.classList.add('hidden');
+      imagePreview.innerHTML = '';
+      imagePreview.classList.add('hidden');
+    });
+
+    function formatTime(timestamp) {
+      const d = new Date(timestamp);
+      const day = d.getDate().toString().padStart(2, '0');
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const hours = d.getHours().toString().padStart(2, '0');
+      const mins = d.getMinutes().toString().padStart(2, '0');
+      return `${day}.${month} • ${hours}:${mins}`;
     }
 
     function escapeHtml(text) {
@@ -281,36 +354,136 @@
       return div.innerHTML;
     }
 
-    // Lắng nghe dữ liệu realtime
+    // Thả tim bài viết
+    window.reactHeart = function(key) {
+      const entryRef = db.ref(`diary_entries/${key}/hearts`);
+      entryRef.transaction((current) => (current || 0) + 1);
+    };
+
+    // Render danh sách nhật ký
+    function renderFeed(entries) {
+      postsList.innerHTML = '';
+      const keys = Object.keys(entries || {}).reverse();
+      postCount.textContent = keys.length;
+
+      if (keys.length === 0) {
+        postsList.innerHTML = `
+          <div class="text-center py-16 bg-white/40 rounded-3xl editorial-border p-8">
+            <p class="text-3xl mb-2">🦫🌷</p>
+            <p class="font-serif text-lg text-coquette-dark">Chưa có mẩu tâm sự nào...</p>
+            <p class="text-xs text-coquette-dark/60 mt-1">Capu & bạn hãy là người mở đầu trang sách đầu tiên nhé.</p>
+          </div>
+        `;
+        return;
+      }
+
+      keys.forEach(key => {
+        const item = entries[key];
+        const isCapu = item.author && item.author.includes('Capu');
+        
+        const card = document.createElement('article');
+        card.className = "glass-box rounded-3xl p-6 relative transition hover:shadow-md";
+
+        // Media HTML (Ảnh đính kèm hoặc Link ngoài)
+        let mediaHtml = '';
+        if (item.image) {
+          mediaHtml = `
+            <div class="mt-3 overflow-hidden rounded-2xl border border-coquette-100">
+              <img src="${item.image}" loading="lazy" class="w-full max-h-96 object-cover hover:scale-[1.01] transition duration-300">
+            </div>`;
+        } else if (item.externalUrl) {
+          const url = item.externalUrl;
+          if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            let videoId = url.includes('youtu.be') ? url.split('/').pop() : url.split('v=')[1]?.split('&')[0];
+            mediaHtml = `
+              <div class="mt-3 overflow-hidden rounded-2xl border border-coquette-100 aspect-video">
+                <iframe src="https://www.youtube.com/embed/${videoId}" class="w-full h-full" allowfullscreen></iframe>
+              </div>`;
+          } else if (url.match(/\.(mp4|webm)$/i)) {
+            mediaHtml = `
+              <div class="mt-3 overflow-hidden rounded-2xl border border-coquette-100 bg-black/5">
+                <video src="${url}" controls class="w-full max-h-96 rounded-2xl"></video>
+              </div>`;
+          } else {
+            mediaHtml = `
+              <div class="mt-3 overflow-hidden rounded-2xl border border-coquette-100">
+                <img src="${url}" loading="lazy" class="w-full max-h-96 object-cover">
+              </div>`;
+          }
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between border-b border-coquette-100/60 pb-3 mb-3">
+            <div class="flex items-center space-x-2.5">
+              <span class="w-7 h-7 rounded-full bg-coquette-100 flex items-center justify-center text-xs">
+                ${isCapu ? '🦫' : '👑'}
+              </span>
+              <div>
+                <span class="text-xs font-semibold text-coquette-dark">${escapeHtml(item.author || '')}</span>
+                <span class="text-[10px] text-coquette-dark/40 ml-2 font-mono">${formatTime(item.createdAt)}</span>
+              </div>
+            </div>
+            <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-white editorial-border text-coquette-500 font-medium">
+              ${escapeHtml(item.mood || '☕')}
+            </span>
+          </div>
+
+          <p class="text-xs text-coquette-dark/90 leading-relaxed whitespace-pre-line">${escapeHtml(item.message)}</p>
+
+          ${mediaHtml}
+
+          <div class="mt-4 pt-2 flex items-center justify-end space-x-2">
+            <button onclick="reactHeart('${key}')" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 editorial-border text-xs text-coquette-400 hover:text-coquette-500 hover:bg-coquette-50 transition active:scale-95">
+              <span>💖</span>
+              <span class="text-[11px] font-semibold">${item.hearts || 0}</span>
+            </button>
+          </div>
+        `;
+        postsList.appendChild(card);
+      });
+    }
+
+    // Lắng nghe dữ liệu
     db.ref('diary_entries').on('value', (snapshot) => {
-      const data = snapshot.val();
-      renderPosts(data);
+      renderFeed(snapshot.val());
     }, (error) => {
-      console.error("Lỗi đọc dữ liệu:", error);
-      postsList.innerHTML = `<div class="text-center py-6 text-xs text-red-500 bg-red-50 rounded-2xl p-4">Lỗi kết nối cơ sở dữ liệu: Vui lòng kiểm tra tab Rules trên Firebase đã đặt true chưa!</div>`;
+      postsList.innerHTML = `<div class="text-center text-xs text-red-500 p-4">Lỗi kết nối: ${error.message}</div>`;
     });
 
     // Xử lý gửi bài
-    diaryForm.addEventListener('submit', (e) => {
+    entryForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const author = document.getElementById('authorInput').value.trim();
-      const message = document.getElementById('messageInput').value.trim();
+      const author = document.querySelector('input[name="author"]:checked').value;
       const mood = document.querySelector('input[name="mood"]:checked').value;
+      const message = document.getElementById('messageInput').value.trim();
+      const externalUrl = mediaUrlInput.value.trim();
 
-      if (!author || !message) return;
+      if (!message) return;
 
-      const newEntry = {
-        author: author,
-        message: message,
-        mood: mood,
-        createdAt: Date.now()
-      };
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-      db.ref('diary_entries').push(newEntry).then(() => {
-        diaryForm.reset();
-      }).catch((err) => {
+      try {
+        await db.ref('diary_entries').push({
+          author,
+          mood,
+          message,
+          image: compressedImageBase64 || null,
+          externalUrl: externalUrl || null,
+          hearts: 0,
+          createdAt: Date.now()
+        });
+
+        // Reset form sau khi gửi
+        entryForm.reset();
+        removeFileBtn.click();
+        mediaUrlInput.value = '';
+      } catch (err) {
         alert("Lỗi khi gửi bài: " + err.message);
-      });
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
     });
   </script>
 </body>
