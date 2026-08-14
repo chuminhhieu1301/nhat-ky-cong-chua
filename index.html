@@ -223,14 +223,14 @@
             </button>
           </div>
 
-          <!-- Bảng Chọn GIF (Giphy) -->
+          <!-- Bảng Chọn GIF (Offline Mượt Mà) -->
           <div id="gifPickerPopup" class="hidden absolute bottom-[110%] right-0 w-72 h-64 bg-white border border-app-border rounded-2xl shadow-2xl p-2 z-50 flex flex-col">
             <div class="flex justify-between items-center mb-2 px-2">
-              <span class="text-xs font-bold text-app-muted"><i class="fa-solid fa-bolt text-yellow-400"></i> Capoo Stickers</span>
-              <button onclick="toggleGifPicker()" class="text-app-muted hover:text-red-500"><i class="fa-solid fa-xmark"></i></button>
+              <span class="text-xs font-bold text-app-text"><i class="fa-solid fa-cat text-app-primary mr-1"></i> Capoo Stickers</span>
+              <button onclick="toggleGifPicker()" class="text-app-muted hover:text-red-500 transition"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="gifGrid" class="flex-1 overflow-y-auto hide-scrollbar grid grid-cols-3 gap-1 p-1 bg-gray-50 rounded-xl">
-              <div class="col-span-3 text-center py-10 text-xs text-app-muted"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải sticker...</div>
+            <div id="gifGrid" class="flex-1 overflow-y-auto hide-scrollbar grid grid-cols-3 gap-1.5 p-1.5 bg-gray-50/50 rounded-xl">
+              <!-- JS sẽ đổ sticker vào đây lập tức -->
             </div>
           </div>
 
@@ -487,67 +487,44 @@
       closeSettingsModal();
     });
 
-    // 7. GIPHY STICKERS INTEGRATION & FALLBACK SYSTEM
-    const GIPHY_API_KEY = "GlVGYHqcVYWLErlhQ4d1iV8XkVpGz7G2";
+    // 7. KHO STICKER CAPOO (OFFLINE TỐC ĐỘ CAO - CHỐNG NHÀ MẠNG CHẶN)
     const gifPickerPopup = document.getElementById('gifPickerPopup');
     const gifGrid = document.getElementById('gifGrid');
     let gifLoaded = false;
 
-    // Kho GIF dự phòng (luôn hoạt động ngay cả khi API Giphy lỗi)
-    const FALLBACK_GIFS = [
-      "https://media.tenor.com/tN8A9o4gVSEAAAAi/capoo-bugcat.gif",
-      "https://media.tenor.com/9wO45QZ_B3MAAAAi/capoo-bugcat.gif",
-      "https://media.tenor.com/2X8KXYBvO1QAAAAi/capoo.gif",
-      "https://media.tenor.com/w9C-nL4R8XoAAAAi/bugcat-capoo.gif",
-      "https://media.tenor.com/T0bC0LccWTEAAAAi/capoo-blue.gif",
-      "https://media.tenor.com/5D7K0F595_MAAAAi/capoo-kiss.gif",
-      "https://media.tenor.com/7sD24B02H0sAAAAi/capoo-pat.gif",
-      "https://media.tenor.com/n14P_YhK0bUAAAAi/capoo-stare.gif",
-      "https://media.tenor.com/xVz-H1_z1K0AAAAi/capoo-excited.gif",
-      "https://media.tenor.com/M8aBps9E_04AAAAi/capoo-eat.gif",
-      "https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif",
-      "https://media.tenor.com/5J3m0E797yQAAAAi/capoo-bugcat.gif"
+    // Danh sách URL ảnh Capoo cố định từ Pinterest (Không bao giờ bị lỗi/chặn)
+    const CAPOO_STICKERS = [
+      "https://i.pinimg.com/originals/c3/88/ab/c388ab1fc96937e2bf98d41e739945cc.gif",
+      "https://i.pinimg.com/originals/6c/bb/53/6cbb53c485c292cc28788e00daebf37f.gif",
+      "https://i.pinimg.com/originals/7e/c9/1a/7ec91a0c0e5a9ee9ee77e9cd5ebfa0fb.gif",
+      "https://i.pinimg.com/originals/a4/09/a6/a409a6333bf9cbf995a5fbc40d421d0a.gif",
+      "https://i.pinimg.com/originals/50/46/78/50467812543b567d1d2936a59960ee78.gif",
+      "https://i.pinimg.com/originals/ef/95/43/ef9543e3c6a4dd2f62cb55562d98c255.gif",
+      "https://i.pinimg.com/originals/11/4a/0c/114a0c8702c81923e3e0ec38f223a8b2.gif",
+      "https://i.pinimg.com/originals/cf/2f/3a/cf2f3a6fa34d58064b547f8db891d4d3.gif",
+      "https://i.pinimg.com/originals/c2/f7/43/c2f7431e77f09ccae8ec0c5eefb9c02d.gif",
+      "https://i.pinimg.com/originals/d9/15/d4/d915d48754162e21deef16e0996be4b2.gif",
+      "https://i.pinimg.com/originals/24/7f/08/247f08c5c7cb4ad50392f4c39f074cd0.gif",
+      "https://i.pinimg.com/originals/07/74/d3/0774d306dcbf1cb34d28369cfbb62fbb.gif",
+      "https://i.pinimg.com/originals/b5/e8/96/b5e896cb43ff32cd7c0e5272a838507d.gif",
+      "https://i.pinimg.com/originals/f3/d7/a7/f3d7a7ff8b97d8ccbaec4472cbf4fa55.gif",
+      "https://i.pinimg.com/originals/47/3d/8c/473d8c114cb9fdfcbf06616a2491f630.gif"
     ];
 
-    window.toggleGifPicker = async function() {
+    window.toggleGifPicker = function() {
       gifPickerPopup.classList.toggle('hidden');
       
+      // Load sticker 1 lần duy nhất để tối ưu hiệu năng
       if (!gifPickerPopup.classList.contains('hidden') && !gifLoaded) {
-        gifGrid.innerHTML = `<div class="col-span-3 text-center py-10 text-xs text-app-muted"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải sticker...</div>`;
-        
-        try {
-          // Thử gọi API Giphy
-          const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=bugcat+capoo&limit=24&rating=g`);
-          
-          if (!res.ok) throw new Error("Giphy API bị chặn hoặc lỗi kết nối");
-          
-          const json = await res.json();
-          if (!json.data || json.data.length === 0) throw new Error("Không có dữ liệu");
-
-          gifGrid.innerHTML = '';
-          json.data.forEach(gif => {
-            const url = gif.images.fixed_width.url;
-            const img = document.createElement('img');
-            img.src = url;
-            img.className = "w-full h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition shadow-sm";
-            img.onclick = () => sendGifMessage(url);
-            gifGrid.appendChild(img);
-          });
-          gifLoaded = true;
-          
-        } catch (error) {
-          // Kích hoạt kho dự phòng nếu API gặp sự cố
-          console.warn("Sử dụng kho GIF dự phòng do lỗi API.");
-          gifGrid.innerHTML = '';
-          FALLBACK_GIFS.forEach(url => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.className = "w-full h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition shadow-sm";
-            img.onclick = () => sendGifMessage(url);
-            gifGrid.appendChild(img);
-          });
-          gifLoaded = true;
-        }
+        gifGrid.innerHTML = '';
+        CAPOO_STICKERS.forEach(url => {
+          const img = document.createElement('img');
+          img.src = url;
+          img.className = "w-full h-20 object-cover rounded-lg cursor-pointer hover:scale-105 transition shadow-sm border border-black/5 bg-white";
+          img.onclick = () => sendGifMessage(url);
+          gifGrid.appendChild(img);
+        });
+        gifLoaded = true;
       }
     };
 
