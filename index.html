@@ -19,18 +19,22 @@
         extend: {
           colors: {
             app: {
-              bg: '#FAF7F5',
-              border: '#E8DFD8',
-              text: '#37352F',
-              muted: '#8A8784',
-              // Tone Capoo (Trái - Xanh Pastel)
-              capooBg: '#EEF6FF',
-              capooBorder: '#C6E1FF',
-              capooText: '#235E99',
-              // Tone Princess (Phải - Hồng Coquette)
-              princessBg: '#FFF0F3',
-              princessBorder: '#FBCAD4',
-              princessText: '#A83B46'
+              primary: '#c08081', // Dusty Rose - Màu chủ đạo mới
+              primaryHover: '#a66a6b', // Màu khi hover
+              bg: '#FDFBFB', // Trắng ngà, ấm nhẹ
+              border: '#E8DDDD', // Viền xám ánh hồng
+              text: '#4A3C3D', // Đen trầm ánh nâu (thay cho đen tuyền)
+              muted: '#968889', // Xám ánh hồng (vintage)
+              
+              // Tone Capoo (Trái - Slate Blue để phối hoàn hảo với Dusty Rose)
+              capooBg: '#F2F5F8',
+              capooBorder: '#D3DEE8',
+              capooText: '#4A6782',
+              
+              // Tone Princess (Phải - Tone #c08081 chuyển sắc)
+              princessBg: '#FCF7F7',
+              princessBorder: '#E6C6C7',
+              princessText: '#955859' // Tối hơn c08081 một chút để dễ đọc (Accessibility)
             }
           },
           fontFamily: {
@@ -45,32 +49,33 @@
 
   <style>
     body {
-      background-color: #FAF7F5;
+      background-color: #FDFBFB;
+      /* Background gradient pha trộn lãng mạn giữa Hồng Tro & Xanh Xám */
       background-image: 
-        radial-gradient(at 0% 0%, rgba(245, 228, 226, 0.5) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(230, 244, 254, 0.4) 0px, transparent 50%);
-      color: #37352F;
+        radial-gradient(at 0% 0%, rgba(192, 128, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(74, 103, 130, 0.08) 0px, transparent 50%);
+      color: #4A3C3D;
       min-height: 100vh;
     }
 
     .glass-bar {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(232, 223, 216, 0.9);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(232, 221, 221, 0.9);
     }
 
     .chat-bubble {
-      box-shadow: 0 4px 16px -3px rgba(74, 40, 40, 0.05);
+      box-shadow: 0 4px 16px -3px rgba(74, 60, 61, 0.04);
       transition: transform 0.15s ease;
     }
 
-    /* Checkbox cho To-Do */
+    /* Checkbox cho To-Do - Áp dụng màu chủ đạo mới */
     .chat-checkbox {
       appearance: none;
       width: 16px;
       height: 16px;
-      border: 1.5px solid #C25952;
+      border: 1.5px solid #c08081;
       border-radius: 4px;
       cursor: pointer;
       display: inline-flex;
@@ -79,7 +84,8 @@
       transition: all 0.15s ease;
     }
     .chat-checkbox:checked {
-      background-color: #C25952;
+      background-color: #c08081;
+      border-color: #c08081;
     }
     .chat-checkbox:checked::after {
       content: '✓';
@@ -102,10 +108,10 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 
-<body class="font-sans antialiased pb-44 selection:bg-app-princessBorder/40">
+<body class="font-sans antialiased pb-44 selection:bg-app-primary/20">
 
   <!-- Top Sticky Navigation & Dual Clocks -->
-  <nav class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-app-border px-4 py-2.5 shadow-sm">
+  <nav class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-app-border px-4 py-2.5 shadow-sm">
     <div class="max-w-3xl mx-auto flex flex-wrap items-center justify-between gap-3">
       
       <!-- Dual Real-time Clocks (Hà Nội vs Paris) -->
@@ -122,7 +128,7 @@
 
       <!-- Auth Profile State -->
       <div id="authStatus" class="flex items-center gap-3 text-xs">
-        <button onclick="openLoginModal()" class="px-3.5 py-1.5 bg-app-text text-white rounded-xl hover:bg-black transition">
+        <button onclick="openLoginModal()" class="px-3.5 py-1.5 bg-app-primary text-white rounded-xl hover:bg-app-primaryHover transition">
           <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Đăng nhập
         </button>
       </div>
@@ -147,39 +153,39 @@
   <!-- Main Chat Stream Container -->
   <main class="max-w-3xl mx-auto px-4 md:px-6">
 
-    <!-- Chat Message List (Sắp xếp tuần tự theo thời gian từ cũ -> mới) -->
+    <!-- Chat Message List -->
     <div id="chatFeed" class="space-y-6 pt-4">
       <div class="text-center py-20 text-app-muted text-xs">
-        <i class="fa-solid fa-spinner fa-spin text-lg mb-2"></i>
+        <i class="fa-solid fa-spinner fa-spin text-lg mb-2 text-app-primary"></i>
         <p>Đang tải dòng thời gian kỷ niệm...</p>
       </div>
     </div>
 
     <!-- Nút cuộn nhanh xuống cuối -->
     <div id="scrollToBottomBtn" class="fixed bottom-24 right-6 z-20 hidden">
-      <button onclick="scrollToBottom(true)" class="p-3 bg-white border border-app-border rounded-full shadow-lg text-app-text hover:bg-app-princessBg transition">
+      <button onclick="scrollToBottom(true)" class="p-3 bg-white border border-app-border rounded-full shadow-lg text-app-primary hover:bg-app-princessBg transition">
         <i class="fa-solid fa-arrow-down text-xs"></i>
       </button>
     </div>
 
   </main>
 
-  <!-- Sticky Bottom Composer Bar (Ghim cố định ở đáy) -->
+  <!-- Sticky Bottom Composer Bar -->
   <div class="fixed bottom-0 left-0 right-0 z-30 p-3 md:p-4 pointer-events-none">
     <div class="max-w-3xl mx-auto pointer-events-auto">
       
       <!-- Card soạn tin khi đã đăng nhập -->
       <div id="composerCard" class="hidden glass-bar rounded-3xl p-3 md:p-4 shadow-xl border border-app-border/80">
         
-        <!-- Controls: Loại tin nhắn & User indicator -->
-        <div class="flex items-center justify-between pb-2 mb-2 border-b border-app-border/50 text-xs">
+        <!-- Controls -->
+        <div class="flex items-center justify-between pb-2 mb-2 border-b border-app-border/70 text-xs">
           <div class="flex items-center gap-2">
             <span id="activeUserBadge" class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full"></span>
             <span class="text-[11px] text-app-muted">nhắn tin...</span>
           </div>
 
           <div class="flex items-center gap-2">
-            <select id="msgType" class="text-xs bg-white border border-app-border rounded-xl px-2.5 py-1 text-app-text outline-none cursor-pointer">
+            <select id="msgType" class="text-xs bg-white border border-app-border rounded-xl px-2.5 py-1 text-app-text outline-none focus:border-app-primary transition cursor-pointer">
               <option value="text">💬 Tin nhắn thường</option>
               <option value="todo">☑️ To-Do cùng làm</option>
               <option value="callout">✨ Hộp ghi chú / Nhắc nhở</option>
@@ -196,27 +202,27 @@
               id="msgContent" 
               rows="1" 
               placeholder="Gửi một mẩu tâm sự, việc cần làm hay lời nhắn..." 
-              class="flex-1 p-2.5 rounded-2xl bg-white/90 border border-app-border focus:border-app-princessText focus:outline-none text-xs leading-relaxed transition resize-none max-h-28"
+              class="flex-1 p-2.5 rounded-2xl bg-white/90 border border-app-border focus:border-app-primary focus:ring-1 focus:ring-app-primary/20 focus:outline-none text-xs leading-relaxed transition resize-none max-h-28"
             ></textarea>
 
             <button 
               id="sendBtn" 
-              class="px-4 py-2.5 bg-app-text hover:bg-black text-white text-xs font-medium rounded-2xl transition flex items-center gap-1.5 shadow-sm active:scale-95 flex-shrink-0"
+              class="px-4 py-2.5 bg-app-primary hover:bg-app-primaryHover text-white text-xs font-medium rounded-2xl transition flex items-center gap-1.5 shadow-sm active:scale-95 flex-shrink-0"
             >
               <span>Gửi</span>
               <i class="fa-regular fa-paper-plane text-[10px]"></i>
             </button>
           </div>
 
-          <!-- Khu vực chọn ảnh (Ẩn hiện khi chọn Gửi ảnh) -->
+          <!-- Khu vực chọn ảnh -->
           <div id="imagePickerContainer" class="hidden flex items-center justify-between pt-1 text-xs">
             <div class="flex items-center gap-2">
-              <label for="imageFileInput" class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-app-border rounded-xl text-app-text hover:bg-gray-50 transition">
-                <i class="fa-regular fa-image text-app-princessText"></i>
+              <label for="imageFileInput" class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-app-border rounded-xl text-app-text hover:text-app-primary transition">
+                <i class="fa-regular fa-image text-app-primary"></i>
                 <span id="imgLabel">Chọn ảnh...</span>
               </label>
               <input type="file" id="imageFileInput" accept="image/*" class="hidden">
-              <button type="button" id="removeImgBtn" class="hidden text-[11px] text-gray-400 hover:text-red-500">
+              <button type="button" id="removeImgBtn" class="hidden text-[11px] text-gray-400 hover:text-red-400 transition">
                 <i class="fa-solid fa-xmark"></i> Hủy
               </button>
             </div>
@@ -227,10 +233,10 @@
 
       </div>
 
-      <!-- Banner nhắc đăng nhập nếu chưa đăng nhập -->
+      <!-- Banner nhắc đăng nhập -->
       <div id="loginPrompt" class="glass-bar rounded-2xl p-3 text-center shadow-lg border border-app-border flex items-center justify-between px-6">
         <span class="text-xs text-app-muted">🔒 Đăng nhập để nhắn tin và ghi nhật ký nhé</span>
-        <button onclick="openLoginModal()" class="px-4 py-1.5 bg-app-text text-white text-xs font-medium rounded-xl hover:bg-black transition">
+        <button onclick="openLoginModal()" class="px-4 py-1.5 bg-app-primary text-white text-xs font-medium rounded-xl hover:bg-app-primaryHover transition">
           Đăng nhập 🎀
         </button>
       </div>
@@ -239,9 +245,9 @@
   </div>
 
   <!-- Login Modal Popup -->
-  <div id="loginModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl p-6 max-w-xs w-full shadow-2xl border border-app-border relative">
-      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xs">
+  <div id="loginModal" class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 max-w-xs w-full shadow-2xl border border-app-border relative transform transition-all">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-primary text-xs transition">
         <i class="fa-solid fa-xmark text-base"></i>
       </button>
 
@@ -273,14 +279,14 @@
             id="loginPassword" 
             required 
             placeholder="Nhập mật khẩu..." 
-            class="w-full px-3.5 py-2.5 rounded-xl border border-app-border bg-gray-50 text-xs focus:bg-white focus:outline-none focus:border-app-princessBorder transition"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-app-border bg-gray-50/50 text-xs focus:bg-white focus:outline-none focus:border-app-primary focus:ring-1 focus:ring-app-primary/20 transition"
           >
-          <p class="text-[10px] text-app-muted mt-1 text-center">(Pass: <b>capoo123</b> hoặc <b>princess123</b>)</p>
+          <p class="text-[10px] text-app-muted mt-1.5 text-center font-mono">(Pass: capoo123 / princess123)</p>
         </div>
 
         <button 
           type="submit" 
-          class="w-full py-2.5 bg-app-text hover:bg-black text-white text-xs font-medium rounded-xl transition shadow"
+          class="w-full py-2.5 bg-app-primary hover:bg-app-primaryHover text-white text-xs font-medium rounded-xl transition shadow"
         >
           Vào trang
         </button>
@@ -291,7 +297,7 @@
   <!-- JavaScript Logic -->
   <script>
     // =========================================================================
-    // 1. CẤU HÌNH FIREBASE REALTIME DATABASE (PRINCESSMEOMEO - SINGAPORE)
+    // 1. CẤU HÌNH FIREBASE REALTIME DATABASE 
     // =========================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyApXsxyEbrH9W30KVyINT9_H3VXqP8Ko5Y",
@@ -346,16 +352,14 @@
     setInterval(updateDualClocks, 1000);
     updateDualClocks();
 
-    // Định dạng giờ kép trong từng tin nhắn
     function formatDualTimestamp(timestamp) {
       const d = new Date(timestamp);
       const opt = { hour: '2-digit', minute: '2-digit', hour12: false };
       const vnTime = new Intl.DateTimeFormat('vi-VN', { ...opt, timeZone: 'Asia/Ho_Chi_Minh' }).format(d);
       const frTime = new Intl.DateTimeFormat('fr-FR', { ...opt, timeZone: 'Europe/Paris' }).format(d);
-      return `<span>🇻🇳 ${vnTime}</span> • <span>🇫🇷 ${frTime}</span>`;
+      return `<span>🇻🇳 ${vnTime}</span> <span class="opacity-40">•</span> <span>🇫🇷 ${frTime}</span>`;
     }
 
-    // Nhãn ngày tháng
     function formatDateHeader(timestamp) {
       const d = new Date(timestamp);
       return `${d.getDate()} tháng ${d.getMonth() + 1}, ${d.getFullYear()}`;
@@ -378,10 +382,10 @@
       if (currentUser) {
         authStatus.innerHTML = `
           <span class="font-medium text-app-text flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-app-primary animate-pulse"></span>
             ${currentUser.name}
           </span>
-          <button onclick="logout()" class="text-[11px] text-red-500 hover:underline">Đăng xuất</button>
+          <button onclick="logout()" class="text-[11px] text-app-muted hover:text-app-primary transition">Đăng xuất</button>
         `;
         composerCard.classList.remove('hidden');
         loginPrompt.classList.add('hidden');
@@ -389,7 +393,7 @@
         activeUserBadge.textContent = currentUser.name;
       } else {
         authStatus.innerHTML = `
-          <button onclick="openLoginModal()" class="px-3.5 py-1.5 bg-app-text text-white rounded-xl hover:bg-black transition">
+          <button onclick="openLoginModal()" class="px-3.5 py-1.5 bg-app-primary text-white rounded-xl hover:bg-app-primaryHover transition">
             <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Đăng nhập
           </button>
         `;
@@ -482,7 +486,7 @@
       imgLabel.textContent = file.name.length > 15 ? file.name.substring(0, 12) + '...' : file.name;
       removeImgBtn.classList.remove('hidden');
       imgThumbPreview.classList.remove('hidden');
-      imgThumbPreview.innerHTML = `<img src="${base64Image}" class="w-8 h-8 object-cover rounded-lg border border-app-border">`;
+      imgThumbPreview.innerHTML = `<img src="${base64Image}" class="w-8 h-8 object-cover rounded-lg border border-app-border shadow-sm">`;
     });
 
     removeImgBtn.addEventListener('click', () => {
@@ -500,12 +504,10 @@
       return div.innerHTML;
     }
 
-    // Toggle To-do
     window.toggleTodo = function(key, currentStatus) {
       db.ref(`duo_chat_stream/${key}/completed`).set(!currentStatus);
     };
 
-    // Xóa tin nhắn (Chỉ chủ tin nhắn mới có quyền)
     window.deleteMessage = function(key, authorId) {
       if (!currentUser || currentUser.id !== authorId) {
         alert("Bạn chỉ có thể xóa tin nhắn của chính mình!");
@@ -516,7 +518,6 @@
       }
     };
 
-    // Gửi tin nhắn mới
     sendBtn.addEventListener('click', async () => {
       if (!currentUser) {
         openLoginModal();
@@ -547,7 +548,6 @@
           createdAt: Date.now()
         });
 
-        // Reset composer
         msgContent.value = '';
         removeImgBtn.click();
         if (msgType.value === 'image') {
@@ -565,7 +565,7 @@
     });
 
     // =========================================================================
-    // 6. RENDER CHAT STREAM THEO TRẬT TỰ THỜI GIAN
+    // 6. RENDER CHAT STREAM 
     // =========================================================================
     const chatFeed = document.getElementById('chatFeed');
     let latestChatData = null;
@@ -583,16 +583,15 @@
 
       if (!data || Object.keys(data).length === 0) {
         chatFeed.innerHTML = `
-          <div class="text-center py-20 border border-dashed border-app-border rounded-3xl p-8 bg-white/40">
-            <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" class="w-12 h-12 mx-auto mb-2 opacity-70">
-            <p class="font-serif text-base text-app-text font-semibold">Chưa có tin nhắn nào trong nhật ký...</p>
-            <p class="text-xs text-app-muted mt-1">Capoo & Công Chúa hãy gửi lời nhắn đầu tiên ở thanh bên dưới nhé!</p>
+          <div class="text-center py-20 border border-dashed border-app-border rounded-3xl p-8 bg-white/40 backdrop-blur-sm">
+            <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" class="w-12 h-12 mx-auto mb-3 opacity-70">
+            <p class="font-serif text-lg text-app-primary font-semibold">Chưa có dòng tâm sự nào...</p>
+            <p class="text-xs text-app-muted mt-1">Capoo & Công Chúa hãy gửi lời nhắn đầu tiên nhé!</p>
           </div>
         `;
         return;
       }
 
-      // 1. Chuyển đổi thành Array và Sort THEO THỨ TỰ TĂNG DẦN (Cũ ở trên, Mới ở dưới)
       const messageList = Object.keys(data).map(key => ({
         key,
         ...data[key]
@@ -611,14 +610,14 @@
           const dateDivider = document.createElement('div');
           dateDivider.className = "flex items-center justify-center my-6";
           dateDivider.innerHTML = `
-            <span class="text-[11px] font-mono text-app-muted bg-white/70 border border-app-border px-3 py-1 rounded-full shadow-xs">
-              — ${itemDateStr} —
+            <span class="text-[11px] font-mono text-app-muted bg-app-bg border border-app-border px-4 py-1.5 rounded-full shadow-sm">
+              ✨ ${itemDateStr} ✨
             </span>
           `;
           chatFeed.appendChild(dateDivider);
         }
 
-        // Tạo phần thân tin nhắn theo Type
+        // Nội dung tin nhắn
         let bodyHtml = '';
         if (item.type === 'text') {
           bodyHtml = `<p class="text-xs leading-relaxed whitespace-pre-line">${escapeHtml(item.content)}</p>`;
@@ -629,51 +628,50 @@
                 type="checkbox" 
                 ${item.completed ? 'checked' : ''} 
                 onchange="toggleTodo('${item.key}', ${item.completed})" 
-                class="chat-checkbox mt-0.5"
+                class="chat-checkbox mt-0.5 flex-shrink-0"
               >
               <span class="text-xs ${item.completed ? 'line-through opacity-60' : ''} transition leading-relaxed">${escapeHtml(item.content)}</span>
             </div>`;
         } else if (item.type === 'callout') {
           bodyHtml = `
-            <div class="flex items-start gap-2 p-2.5 rounded-xl bg-white/60 border border-black/5 text-xs">
-              <span>${isCapoo ? '🐱🍖' : '👑🎀'}</span>
-              <p class="leading-relaxed whitespace-pre-line font-medium">${escapeHtml(item.content)}</p>
+            <div class="flex items-start gap-2.5 p-3 rounded-xl bg-white/60 border border-black/5 text-xs shadow-sm">
+              <span class="mt-0.5">${isCapoo ? '🐱' : '🎀'}</span>
+              <p class="leading-relaxed whitespace-pre-line font-medium text-app-text">${escapeHtml(item.content)}</p>
             </div>`;
         } else if (item.type === 'image') {
           bodyHtml = `
             <div class="space-y-2">
-              <img src="${item.image}" loading="lazy" class="w-full max-h-80 object-cover rounded-xl border border-black/5">
+              <img src="${item.image}" loading="lazy" class="w-full max-h-80 object-cover rounded-xl border border-black/5 shadow-sm">
               ${item.content ? `<p class="text-xs italic opacity-90">${escapeHtml(item.content)}</p>` : ''}
             </div>`;
         }
 
-        // Tạo Bong Bóng Chat (Bubble)
+        // Tạo Bong Bóng Chat
         const row = document.createElement('div');
         row.className = `flex items-end gap-2.5 ${isCapoo ? 'justify-start' : 'justify-end'} group`;
 
         const bubbleTheme = isCapoo 
-          ? 'bg-app-capooBg border-app-capooBorder text-app-capooText rounded-tl-2xl rounded-tr-2xl rounded-br-2xl rounded-bl-xs' 
-          : 'bg-app-princessBg border-app-princessBorder text-app-princessText rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-xs';
+          ? 'bg-app-capooBg border-app-capooBorder text-app-capooText rounded-tl-2xl rounded-tr-2xl rounded-br-2xl rounded-bl-sm' 
+          : 'bg-app-princessBg border-app-princessBorder text-app-princessText rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-sm';
 
         const avatar = isCapoo 
-          ? `<div class="w-7 h-7 rounded-full bg-app-capooBg border border-app-capooBorder flex items-center justify-center text-xs flex-shrink-0 mb-1">🐱</div>`
-          : `<div class="w-7 h-7 rounded-full bg-app-princessBg border border-app-princessBorder flex items-center justify-center text-xs flex-shrink-0 mb-1">👑</div>`;
+          ? `<div class="w-7 h-7 rounded-full bg-white border border-app-capooBorder flex items-center justify-center text-xs flex-shrink-0 mb-1 shadow-sm">🐱</div>`
+          : `<div class="w-7 h-7 rounded-full bg-white border border-app-princessBorder flex items-center justify-center text-xs flex-shrink-0 mb-1 shadow-sm">👑</div>`;
 
         const bubbleContent = `
           <div class="max-w-[85%] sm:max-w-[70%]">
-            <div class="text-[10px] font-semibold mb-1 px-1 opacity-70 flex items-center gap-1 ${isCapoo ? 'justify-start' : 'justify-end'}">
+            <div class="text-[10px] font-semibold mb-1 px-1 opacity-60 flex items-center gap-1 ${isCapoo ? 'justify-start' : 'justify-end'}">
               <span>${escapeHtml(item.authorName)}</span>
             </div>
 
             <div class="chat-bubble p-3.5 border ${bubbleTheme}">
               ${bodyHtml}
               
-              <!-- Footer: Giờ kép VN & Pháp + Nút xóa chính chủ -->
-              <div class="flex items-center justify-between gap-3 text-[9.5px] opacity-70 font-mono mt-2 pt-1 border-t border-black/5">
-                <div class="flex items-center gap-1">${formatDualTimestamp(item.createdAt)}</div>
+              <div class="flex items-center justify-between gap-3 text-[9px] opacity-70 font-mono mt-2 pt-1 border-t border-black/5">
+                <div class="flex items-center gap-1.5">${formatDualTimestamp(item.createdAt)}</div>
                 ${isOwner ? `
-                  <button onclick="deleteMessage('${item.key}', '${item.authorId}')" class="text-red-400 hover:text-red-600 transition hover:underline" title="Chỉ bạn mới có quyền xóa">
-                    <i class="fa-regular fa-trash-can"></i>
+                  <button onclick="deleteMessage('${item.key}', '${item.authorId}')" class="text-app-muted hover:text-red-400 transition hover:scale-110" title="Xóa tin nhắn">
+                    <i class="fa-solid fa-trash-can"></i>
                   </button>` : ''}
               </div>
             </div>
@@ -690,7 +688,6 @@
       });
     }
 
-    // Lắng nghe dữ liệu từ Firebase Realtime
     db.ref('duo_chat_stream').on('value', (snapshot) => {
       renderChatStream(snapshot.val());
     });
