@@ -19,19 +19,17 @@
         extend: {
           colors: {
             app: {
-              primary: '#c08081', // Dusty Rose - Màu chủ đạo
-              primaryHover: '#a66a6b', // Màu khi hover
-              bg: '#D5AAAA', // Màu nền mới theo yêu cầu
-              border: '#E8DDDD', // Viền xám ánh hồng
-              text: '#4A3C3D', // Đen trầm ánh nâu
-              muted: '#7A6B6C', // Xám ánh hồng đậm hơn chút để dễ đọc
+              primary: '#c08081', 
+              primaryHover: '#a66a6b', 
+              bg: '#D5AAAA', 
+              border: '#E8DDDD', 
+              text: '#4A3C3D', 
+              muted: '#7A6B6C', 
               
-              // Tone Capoo (Trái - Slate Blue)
               capooBg: '#F2F5F8',
               capooBorder: '#D3DEE8',
               capooText: '#3B5773',
               
-              // Tone Princess (Phải - Tone #c08081 chuyển sắc)
               princessBg: '#FCF7F7',
               princessBorder: '#E6C6C7',
               princessText: '#955859'
@@ -50,7 +48,6 @@
   <style>
     body {
       background-color: #D5AAAA;
-      /* Phủ thêm một lớp filter ánh sáng trắng cực nhẹ ở góc trên để màn hình có chiều sâu, không bị bệt màu */
       background-image: 
         radial-gradient(at 50% 0%, rgba(255, 255, 255, 0.2) 0px, transparent 75%),
         radial-gradient(at 100% 100%, rgba(0, 0, 0, 0.02) 0px, transparent 50%);
@@ -70,7 +67,6 @@
       transition: transform 0.15s ease;
     }
 
-    /* Checkbox cho To-Do - Phóng to size */
     .chat-checkbox {
       appearance: none;
       width: 20px;
@@ -95,6 +91,15 @@
       font-weight: bold;
     }
 
+    /* Ẩn thanh cuộn cho danh sách GIF */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
     @keyframes capooWiggle {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
       50% { transform: translateY(-4px) rotate(4deg); }
@@ -109,13 +114,13 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 
-<body class="font-sans antialiased pb-48 selection:bg-app-primary/30">
+<body class="font-sans antialiased pb-52 selection:bg-app-primary/30 relative">
 
-  <!-- Top Sticky Navigation & Dual Clocks -->
+  <!-- Top Navigation -->
   <nav class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-app-border px-5 py-3 shadow-sm">
     <div class="max-w-3xl mx-auto flex flex-wrap items-center justify-between gap-3">
       
-      <!-- Dual Real-time Clocks (Hà Nội vs Paris) -->
+      <!-- Dual Clocks -->
       <div class="flex items-center space-x-3 text-sm font-mono">
         <div class="flex items-center gap-1.5 bg-app-capooBg border border-app-capooBorder px-3 py-1.5 rounded-full text-app-capooText shadow-sm">
           <span>🇻🇳 HN:</span>
@@ -127,7 +132,7 @@
         </div>
       </div>
 
-      <!-- Auth Profile State -->
+      <!-- Auth & Settings -->
       <div id="authStatus" class="flex items-center gap-3 text-sm">
         <button onclick="openLoginModal()" class="px-4 py-2 bg-app-primary text-white rounded-xl hover:bg-app-primaryHover transition">
           <i class="fa-solid fa-arrow-right-to-bracket mr-1.5"></i> Đăng nhập
@@ -137,7 +142,7 @@
     </div>
   </nav>
 
-  <!-- Header Section -->
+  <!-- Header -->
   <header class="max-w-3xl mx-auto px-4 pt-10 pb-6 text-center">
     <div class="inline-block relative mb-2">
       <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" class="w-20 h-20 mx-auto capoo-anim object-contain drop-shadow-md" alt="Capoo">
@@ -151,32 +156,26 @@
     </p>
   </header>
 
-  <!-- Main Chat Stream Container -->
+  <!-- Main Chat -->
   <main class="max-w-3xl mx-auto px-4 md:px-6">
-
-    <!-- Chat Message List -->
     <div id="chatFeed" class="space-y-7 pt-4">
       <div class="text-center py-20 text-white text-base">
         <i class="fa-solid fa-spinner fa-spin text-2xl mb-3"></i>
         <p class="font-medium">Đang tải dòng thời gian kỷ niệm...</p>
       </div>
     </div>
-
-    <!-- Nút cuộn nhanh xuống cuối -->
-    <div id="scrollToBottomBtn" class="fixed bottom-32 right-6 z-20 hidden">
+    <div id="scrollToBottomBtn" class="fixed bottom-36 right-6 z-20 hidden">
       <button onclick="scrollToBottom(true)" class="p-4 bg-white border border-app-border rounded-full shadow-lg text-app-primary hover:bg-app-princessBg transition">
         <i class="fa-solid fa-arrow-down text-base"></i>
       </button>
     </div>
-
   </main>
 
-  <!-- Sticky Bottom Composer Bar -->
+  <!-- Bottom Composer Bar -->
   <div class="fixed bottom-0 left-0 right-0 z-30 p-3 md:p-5 pointer-events-none">
     <div class="max-w-3xl mx-auto pointer-events-auto">
       
-      <!-- Card soạn tin khi đã đăng nhập -->
-      <div id="composerCard" class="hidden glass-bar rounded-[2rem] p-4 md:p-5 shadow-xl border border-white/50">
+      <div id="composerCard" class="hidden glass-bar rounded-[2rem] p-4 md:p-5 shadow-xl border border-white/50 relative">
         
         <!-- Controls -->
         <div class="flex items-center justify-between pb-3 mb-3 border-b border-app-border/70 text-sm">
@@ -184,7 +183,6 @@
             <span id="activeUserBadge" class="text-xs font-bold px-3 py-1 rounded-full shadow-sm"></span>
             <span class="text-sm text-app-muted">nhắn tin...</span>
           </div>
-
           <div class="flex items-center gap-2">
             <select id="msgType" class="text-sm bg-white border border-app-border rounded-xl px-3 py-1.5 text-app-text outline-none focus:border-app-primary transition cursor-pointer shadow-sm">
               <option value="text">💬 Tin nhắn thường</option>
@@ -195,8 +193,8 @@
           </div>
         </div>
 
-        <!-- Input Box & Actions -->
-        <div class="space-y-3">
+        <!-- Inputs -->
+        <div class="space-y-3 relative">
           
           <div class="flex items-end gap-3">
             <textarea 
@@ -206,6 +204,16 @@
               class="flex-1 p-3.5 rounded-2xl bg-white/90 border border-app-border focus:border-app-primary focus:ring-2 focus:ring-app-primary/20 focus:outline-none text-base leading-relaxed transition resize-none max-h-32 shadow-inner"
             ></textarea>
 
+            <!-- Nút Gửi Sticker -->
+            <button 
+              onclick="toggleGifPicker()"
+              title="Gửi Sticker Capoo"
+              class="px-3.5 py-3.5 bg-white border border-app-border hover:text-app-primary text-app-muted text-lg font-semibold rounded-2xl transition flex items-center justify-center shadow-sm active:scale-95 flex-shrink-0"
+            >
+              <i class="fa-solid fa-face-smile"></i>
+            </button>
+
+            <!-- Nút Gửi Tin Nhắn -->
             <button 
               id="sendBtn" 
               class="px-5 py-3.5 bg-app-primary hover:bg-app-primaryHover text-white text-base font-semibold rounded-2xl transition flex items-center gap-2 shadow-md active:scale-95 flex-shrink-0"
@@ -215,7 +223,18 @@
             </button>
           </div>
 
-          <!-- Khu vực chọn ảnh -->
+          <!-- Bảng Chọn GIF (Giphy) -->
+          <div id="gifPickerPopup" class="hidden absolute bottom-[110%] right-0 w-72 h-64 bg-white border border-app-border rounded-2xl shadow-2xl p-2 z-50 flex flex-col">
+            <div class="flex justify-between items-center mb-2 px-2">
+              <span class="text-xs font-bold text-app-muted"><i class="fa-solid fa-bolt text-yellow-400"></i> Capoo Stickers</span>
+              <button onclick="toggleGifPicker()" class="text-app-muted hover:text-red-500"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="gifGrid" class="flex-1 overflow-y-auto hide-scrollbar grid grid-cols-3 gap-1 p-1 bg-gray-50 rounded-xl">
+              <div class="col-span-3 text-center py-10 text-xs text-app-muted"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải sticker...</div>
+            </div>
+          </div>
+
+          <!-- Khu vực chọn ảnh upload -->
           <div id="imagePickerContainer" class="hidden flex items-center justify-between pt-1 text-sm">
             <div class="flex items-center gap-3">
               <label for="imageFileInput" class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-app-border rounded-xl text-app-text hover:text-app-primary transition shadow-sm">
@@ -231,10 +250,9 @@
           </div>
 
         </div>
-
       </div>
 
-      <!-- Banner nhắc đăng nhập -->
+      <!-- Login Prompt -->
       <div id="loginPrompt" class="glass-bar rounded-2xl p-4 text-center shadow-lg border border-white/50 flex flex-col md:flex-row items-center justify-between gap-4 px-6">
         <span class="text-sm font-medium text-app-text">🔒 Đăng nhập để nhắn tin và ghi nhật ký nhé</span>
         <button onclick="openLoginModal()" class="px-5 py-2 bg-app-primary text-white text-sm font-bold rounded-xl hover:bg-app-primaryHover transition shadow-md w-full md:w-auto">
@@ -245,9 +263,9 @@
     </div>
   </div>
 
-  <!-- Login Modal Popup -->
+  <!-- Login Modal -->
   <div id="loginModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl p-7 max-w-sm w-full shadow-2xl border border-app-border relative transform transition-all">
+    <div class="bg-white rounded-3xl p-7 max-w-sm w-full shadow-2xl border border-app-border relative">
       <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-app-muted hover:text-app-primary text-base transition">
         <i class="fa-solid fa-xmark text-xl"></i>
       </button>
@@ -255,7 +273,6 @@
       <div class="text-center mb-6">
         <span class="text-5xl drop-shadow-sm">🪞</span>
         <h3 class="font-serif text-2xl font-bold text-app-text mt-3">Đăng nhập tài khoản</h3>
-        <p class="text-sm text-app-muted mt-1">Chọn nhân vật của bạn</p>
       </div>
 
       <form id="loginForm" class="space-y-5">
@@ -275,31 +292,49 @@
         </div>
 
         <div>
-          <input 
-            type="password" 
-            id="loginPassword" 
-            required 
-            placeholder="Nhập mật khẩu..." 
-            class="w-full px-4 py-3 rounded-xl border border-app-border bg-gray-50/50 text-base focus:bg-white focus:outline-none focus:border-app-primary focus:ring-2 focus:ring-app-primary/20 transition shadow-inner"
-          >
+          <input type="password" id="loginPassword" required placeholder="Nhập mật khẩu..." class="w-full px-4 py-3 rounded-xl border border-app-border bg-gray-50/50 text-base focus:bg-white focus:outline-none focus:border-app-primary focus:ring-2 focus:ring-app-primary/20 transition shadow-inner">
           <p class="text-xs text-app-muted mt-2 text-center font-mono">(Pass: capoo123 / princess123)</p>
         </div>
 
-        <button 
-          type="submit" 
-          class="w-full py-3.5 bg-app-primary hover:bg-app-primaryHover text-white text-base font-bold rounded-xl transition shadow-md"
-        >
+        <button type="submit" class="w-full py-3.5 bg-app-primary hover:bg-app-primaryHover text-white text-base font-bold rounded-xl transition shadow-md">
           Vào trang
         </button>
       </form>
     </div>
   </div>
 
+  <!-- Settings (Avatar) Modal -->
+  <div id="settingsModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-7 max-w-sm w-full shadow-2xl border border-app-border relative">
+      <button onclick="closeSettingsModal()" class="absolute top-5 right-5 text-app-muted hover:text-app-primary text-base transition">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <h3 class="font-serif text-2xl font-bold text-app-text">Đổi Ảnh Đại Diện</h3>
+        <p class="text-sm text-app-muted mt-1">Làm mới avatar của bạn nha ✨</p>
+      </div>
+
+      <div class="flex flex-col items-center gap-4">
+        <div id="avatarPreviewContainer" class="w-24 h-24 rounded-full border-4 border-app-primary/20 bg-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
+          <i class="fa-solid fa-user text-3xl text-gray-400"></i>
+        </div>
+        
+        <label for="avatarInput" class="cursor-pointer px-4 py-2 bg-app-bg text-app-text font-semibold rounded-xl hover:bg-app-primary hover:text-white transition shadow-sm text-sm">
+          <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Tải ảnh lên
+        </label>
+        <input type="file" id="avatarInput" accept="image/*" class="hidden">
+        
+        <button id="saveAvatarBtn" class="w-full py-3 bg-app-primary text-white font-bold rounded-xl hover:bg-app-primaryHover transition shadow-md hidden">
+          Lưu Avatar
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- JavaScript Logic -->
   <script>
-    // =========================================================================
-    // 1. CẤU HÌNH FIREBASE REALTIME DATABASE 
-    // =========================================================================
+    // 1. CẤU HÌNH FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyApXsxyEbrH9W30KVyINT9_H3VXqP8Ko5Y",
       authDomain: "princessmeomeo.firebaseapp.com",
@@ -307,86 +342,61 @@
       projectId: "princessmeomeo",
       storageBucket: "princessmeomeo.firebasestorage.app",
       messagingSenderId: "240385247065",
-      appId: "1:240385247065:web:8c69b3f83dadce03c06e48",
-      measurementId: "G-L4L79M7BMQ"
+      appId: "1:240385247065:web:8c69b3f83dadce03c06e48"
     };
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // =========================================================================
-    // 2. TÀI KHOẢN & PHÂN QUYỀN
-    // =========================================================================
+    // 2. STATE & PROFILES
     const ACCOUNTS = {
-      capoo: {
-        id: 'capoo',
-        name: 'Capoo 🐱🐛',
-        password: 'capoo123',
-        badgeClass: 'bg-app-capooBg text-app-capooText border border-app-capooBorder'
-      },
-      princess: {
-        id: 'princess',
-        name: 'Công Chúa 👑🎀',
-        password: 'princess123',
-        badgeClass: 'bg-app-princessBg text-app-princessText border border-app-princessBorder'
-      }
+      capoo: { id: 'capoo', name: 'Capoo 🐱🐛', password: 'capoo123', badgeClass: 'bg-app-capooBg text-app-capooText border border-app-capooBorder' },
+      princess: { id: 'princess', name: 'Công Chúa 👑🎀', password: 'princess123', badgeClass: 'bg-app-princessBg text-app-princessText border border-app-princessBorder' }
     };
-
     let currentUser = JSON.parse(localStorage.getItem('notion_duo_user')) || null;
+    let globalAvatars = {}; // Chứa avatar realtime tải từ db
 
-    // =========================================================================
-    // 3. LIVE DUAL CLOCKS (HÀ NỘI & PARIS)
-    // =========================================================================
+    // Lắng nghe Avatar từ Database
+    db.ref('duo_profiles').on('value', (snap) => {
+      globalAvatars = snap.val() || {};
+      if (latestChatData) renderChatStream(latestChatData); // Cập nhật lại UI chat ngay lập tức
+    });
+
+    // 3. DUAL CLOCKS
     function updateDualClocks() {
       const now = new Date();
-      const timeVN = new Intl.DateTimeFormat('vi-VN', {
-        timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hour12: false
-      }).format(now);
-
-      const timeFR = new Intl.DateTimeFormat('fr-FR', {
-        timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', hour12: false
-      }).format(now);
-
-      document.getElementById('clockVN').textContent = timeVN;
-      document.getElementById('clockFR').textContent = timeFR;
+      document.getElementById('clockVN').textContent = new Intl.DateTimeFormat('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hour12: false }).format(now);
+      document.getElementById('clockFR').textContent = new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', hour12: false }).format(now);
     }
-    setInterval(updateDualClocks, 1000);
-    updateDualClocks();
+    setInterval(updateDualClocks, 1000); updateDualClocks();
 
     function formatDualTimestamp(timestamp) {
       const d = new Date(timestamp);
-      const opt = { hour: '2-digit', minute: '2-digit', hour12: false };
-      const vnTime = new Intl.DateTimeFormat('vi-VN', { ...opt, timeZone: 'Asia/Ho_Chi_Minh' }).format(d);
-      const frTime = new Intl.DateTimeFormat('fr-FR', { ...opt, timeZone: 'Europe/Paris' }).format(d);
+      const vnTime = new Intl.DateTimeFormat('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Ho_Chi_Minh' }).format(d);
+      const frTime = new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Paris' }).format(d);
       return `<span>🇻🇳 ${vnTime}</span> <span class="opacity-40 px-1">•</span> <span>🇫🇷 ${frTime}</span>`;
     }
 
-    function formatDateHeader(timestamp) {
-      const d = new Date(timestamp);
-      return `${d.getDate()} tháng ${d.getMonth() + 1}, ${d.getFullYear()}`;
-    }
-
-    // =========================================================================
-    // 4. QUẢN LÝ ĐĂNG NHẬP
-    // =========================================================================
-    const loginModal = document.getElementById('loginModal');
-    const loginForm = document.getElementById('loginForm');
-    const authStatus = document.getElementById('authStatus');
-    const composerCard = document.getElementById('composerCard');
-    const loginPrompt = document.getElementById('loginPrompt');
-    const activeUserBadge = document.getElementById('activeUserBadge');
-
-    function openLoginModal() { loginModal.classList.remove('hidden'); }
-    function closeLoginModal() { loginModal.classList.add('hidden'); }
+    // 4. AUTH UI
+    function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
+    function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
 
     function updateAuthUI() {
+      const authStatus = document.getElementById('authStatus');
+      const composerCard = document.getElementById('composerCard');
+      const loginPrompt = document.getElementById('loginPrompt');
+      const activeUserBadge = document.getElementById('activeUserBadge');
+
       if (currentUser) {
         authStatus.innerHTML = `
+          <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full border border-app-border bg-white flex items-center justify-center text-app-muted hover:text-app-primary transition shadow-sm" title="Cài đặt Avatar">
+            <i class="fa-solid fa-gear"></i>
+          </button>
           <span class="font-bold text-app-text flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-app-primary animate-pulse"></span>
             ${currentUser.name}
           </span>
-          <button onclick="logout()" class="text-xs font-semibold text-app-muted hover:text-app-primary transition">Đăng xuất</button>
+          <button onclick="logout()" class="text-xs font-semibold text-app-muted hover:text-app-primary transition ml-1">Đăng xuất</button>
         `;
         composerCard.classList.remove('hidden');
         loginPrompt.classList.add('hidden');
@@ -403,44 +413,132 @@
       }
     }
 
-    loginForm.addEventListener('submit', (e) => {
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const selectedId = document.querySelector('input[name="loginUser"]:checked').value;
       const pass = document.getElementById('loginPassword').value.trim();
-
       if (pass === ACCOUNTS[selectedId].password) {
         currentUser = ACCOUNTS[selectedId];
         localStorage.setItem('notion_duo_user', JSON.stringify(currentUser));
-        closeLoginModal();
-        loginForm.reset();
-        updateAuthUI();
-        if (latestChatData) renderChatStream(latestChatData);
-      } else {
-        alert("Mật khẩu không đúng rồi nè!");
-      }
+        closeLoginModal(); e.target.reset(); updateAuthUI();
+      } else alert("Mật khẩu không đúng rồi nè!");
     });
 
     window.logout = function() {
-      currentUser = null;
-      localStorage.removeItem('notion_duo_user');
-      updateAuthUI();
-      if (latestChatData) renderChatStream(latestChatData);
+      currentUser = null; localStorage.removeItem('notion_duo_user'); updateAuthUI();
     };
-
     updateAuthUI();
 
-    // =========================================================================
-    // 5. SOẠN TIN & NÉN ẢNH
-    // =========================================================================
+    // 5. NÉN ẢNH (Dùng chung cho Gửi Ảnh & Upload Avatar)
+    function compressImage(file, maxWidth = 1000) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width, height = img.height;
+            if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          };
+        };
+        reader.onerror = reject;
+      });
+    }
+
+    // 6. CÀI ĐẶT AVATAR
+    let newAvatarBase64 = null;
+    const settingsModal = document.getElementById('settingsModal');
+    const avatarPreviewContainer = document.getElementById('avatarPreviewContainer');
+    const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+
+    window.openSettingsModal = function() {
+      if (!currentUser) return;
+      settingsModal.classList.remove('hidden');
+      // Hiện avatar hiện tại nếu có
+      const currentAvt = globalAvatars[currentUser.id]?.avatar;
+      if (currentAvt) {
+        avatarPreviewContainer.innerHTML = `<img src="${currentAvt}" class="w-full h-full object-cover">`;
+      } else {
+        avatarPreviewContainer.innerHTML = `<i class="fa-solid fa-user text-3xl text-gray-400"></i>`;
+      }
+      saveAvatarBtn.classList.add('hidden');
+      newAvatarBase64 = null;
+    }
+    window.closeSettingsModal = function() { settingsModal.classList.add('hidden'); }
+
+    document.getElementById('avatarInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      avatarPreviewContainer.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gray-400"></i>`;
+      newAvatarBase64 = await compressImage(file, 250); // Resize nhỏ gọn cho Avatar
+      avatarPreviewContainer.innerHTML = `<img src="${newAvatarBase64}" class="w-full h-full object-cover">`;
+      saveAvatarBtn.classList.remove('hidden');
+    });
+
+    saveAvatarBtn.addEventListener('click', async () => {
+      if (!newAvatarBase64 || !currentUser) return;
+      saveAvatarBtn.textContent = "Đang lưu...";
+      await db.ref(`duo_profiles/${currentUser.id}/avatar`).set(newAvatarBase64);
+      saveAvatarBtn.textContent = "Lưu Avatar";
+      closeSettingsModal();
+    });
+
+    // 7. GIPHY STICKERS INTEGRATION
+    const GIPHY_API_KEY = "GlVGYHqcVYWLErlhQ4d1iV8XkVpGz7G2"; // Dev key tiêu chuẩn
+    const gifPickerPopup = document.getElementById('gifPickerPopup');
+    const gifGrid = document.getElementById('gifGrid');
+    let gifLoaded = false;
+
+    window.toggleGifPicker = async function() {
+      gifPickerPopup.classList.toggle('hidden');
+      if (!gifPickerPopup.classList.contains('hidden') && !gifLoaded) {
+        try {
+          // Lấy API Giphy tìm kiếm từ khóa "capoo bugcat"
+          const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=capoo+bugcat&limit=24&rating=g`);
+          const json = await res.json();
+          gifGrid.innerHTML = '';
+          json.data.forEach(gif => {
+            const url = gif.images.fixed_width.url; // Lấy dung lượng tối ưu
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = "w-full h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition";
+            img.onclick = () => sendGifMessage(url);
+            gifGrid.appendChild(img);
+          });
+          gifLoaded = true;
+        } catch (error) {
+          gifGrid.innerHTML = `<div class="col-span-3 text-center text-xs text-red-400">Lỗi tải GIF 😢</div>`;
+        }
+      }
+    };
+
+    async function sendGifMessage(gifUrl) {
+      if (!currentUser) return;
+      gifPickerPopup.classList.add('hidden');
+      await db.ref('duo_chat_stream').push({
+        authorId: currentUser.id,
+        authorName: currentUser.name,
+        type: 'gif',
+        image: gifUrl, // Dùng field image để chứa link gif
+        completed: false,
+        createdAt: Date.now()
+      });
+      setTimeout(() => scrollToBottom(true), 200);
+    }
+
+    // 8. SOẠN TIN THƯỜNG / ẢNH
     const msgType = document.getElementById('msgType');
     const msgContent = document.getElementById('msgContent');
     const imagePickerContainer = document.getElementById('imagePickerContainer');
     const imageFileInput = document.getElementById('imageFileInput');
-    const imgLabel = document.getElementById('imgLabel');
     const removeImgBtn = document.getElementById('removeImgBtn');
     const imgThumbPreview = document.getElementById('imgThumbPreview');
-    const sendBtn = document.getElementById('sendBtn');
-
     let base64Image = null;
 
     msgType.addEventListener('change', () => {
@@ -453,246 +551,129 @@
       }
     });
 
-    function compressImage(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-          const img = new Image();
-          img.src = e.target.result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const maxWidth = 1000;
-            let width = img.width, height = img.height;
-            if (width > maxWidth) {
-              height = Math.round((height * maxWidth) / width);
-              width = maxWidth;
-            }
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', 0.75));
-          };
-        };
-        reader.onerror = (err) => reject(err);
-      });
-    }
-
     imageFileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      imgLabel.textContent = "Đang xử lý ảnh...";
       base64Image = await compressImage(file);
-      imgLabel.textContent = file.name.length > 15 ? file.name.substring(0, 12) + '...' : file.name;
       removeImgBtn.classList.remove('hidden');
       imgThumbPreview.classList.remove('hidden');
       imgThumbPreview.innerHTML = `<img src="${base64Image}" class="w-10 h-10 object-cover rounded-lg border border-app-border shadow-sm">`;
     });
 
     removeImgBtn.addEventListener('click', () => {
-      base64Image = null;
-      imageFileInput.value = '';
-      imgLabel.textContent = "Chọn ảnh...";
+      base64Image = null; imageFileInput.value = '';
       removeImgBtn.classList.add('hidden');
-      imgThumbPreview.innerHTML = '';
-      imgThumbPreview.classList.add('hidden');
+      imgThumbPreview.innerHTML = ''; imgThumbPreview.classList.add('hidden');
     });
 
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text || '';
-      return div.innerHTML;
-    }
-
-    window.toggleTodo = function(key, currentStatus) {
-      db.ref(`duo_chat_stream/${key}/completed`).set(!currentStatus);
-    };
-
+    window.toggleTodo = function(key, currentStatus) { db.ref(`duo_chat_stream/${key}/completed`).set(!currentStatus); };
     window.deleteMessage = function(key, authorId) {
-      if (!currentUser || currentUser.id !== authorId) {
-        alert("Bạn chỉ có thể xóa tin nhắn của chính mình!");
-        return;
-      }
-      if (confirm("Xóa tin nhắn này khỏi nhật ký?")) {
-        db.ref(`duo_chat_stream/${key}`).remove();
-      }
+      if (!currentUser || currentUser.id !== authorId) { alert("Bạn chỉ có thể xóa tin nhắn của chính mình!"); return; }
+      if (confirm("Xóa tin nhắn này khỏi nhật ký?")) db.ref(`duo_chat_stream/${key}`).remove();
     };
 
-    sendBtn.addEventListener('click', async () => {
-      if (!currentUser) {
-        openLoginModal();
-        return;
-      }
+    document.getElementById('sendBtn').addEventListener('click', async () => {
+      if (!currentUser) { openLoginModal(); return; }
+      const type = msgType.value; const content = msgContent.value.trim();
+      if (type === 'image' && !base64Image) { alert("Vui lòng chọn một bức ảnh!"); return; }
+      if (type !== 'image' && !content) return;
 
-      const type = msgType.value;
-      const content = msgContent.value.trim();
-
-      if (type === 'image' && !base64Image) {
-        alert("Vui lòng chọn một bức ảnh trước khi gửi!");
-        return;
-      }
-      if (type !== 'image' && !content) {
-        return;
-      }
-
-      sendBtn.disabled = true;
-
+      document.getElementById('sendBtn').disabled = true;
       try {
         await db.ref('duo_chat_stream').push({
-          authorId: currentUser.id,
-          authorName: currentUser.name,
-          type,
-          content: content || null,
-          image: base64Image || null,
-          completed: false,
-          createdAt: Date.now()
+          authorId: currentUser.id, authorName: currentUser.name, type, content: content || null,
+          image: base64Image || null, completed: false, createdAt: Date.now()
         });
-
-        msgContent.value = '';
-        removeImgBtn.click();
-        if (msgType.value === 'image') {
-          msgType.value = 'text';
-          imagePickerContainer.classList.add('hidden');
-        }
-
+        msgContent.value = ''; removeImgBtn.click();
+        if (msgType.value === 'image') { msgType.value = 'text'; imagePickerContainer.classList.add('hidden'); }
         setTimeout(() => scrollToBottom(true), 200);
-
-      } catch (err) {
-        alert("Lỗi khi gửi: " + err.message);
-      } finally {
-        sendBtn.disabled = false;
-      }
+      } catch (err) { alert("Lỗi khi gửi: " + err.message); } 
+      finally { document.getElementById('sendBtn').disabled = false; }
     });
 
-    // =========================================================================
-    // 6. RENDER CHAT STREAM 
-    // =========================================================================
+    // 9. RENDER CHAT STREAM
     const chatFeed = document.getElementById('chatFeed');
     let latestChatData = null;
 
-    function scrollToBottom(smooth = false) {
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: smooth ? 'smooth' : 'auto'
-      });
+    function scrollToBottom(smooth = false) { window.scrollTo({ top: document.body.scrollHeight, behavior: smooth ? 'smooth' : 'auto' }); }
+    function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text || ''; return div.innerHTML; }
+
+    function getAvatarHtml(userId) {
+      const customAvatar = globalAvatars[userId]?.avatar;
+      if (customAvatar) {
+        return `<img src="${customAvatar}" class="w-10 h-10 rounded-full object-cover border border-app-border shadow-sm flex-shrink-0 mb-1 bg-white">`;
+      }
+      // Mặc định
+      const isCapoo = userId === 'capoo';
+      const borderTheme = isCapoo ? 'border-app-capooBorder text-base' : 'border-app-princessBorder text-base';
+      return `<div class="w-10 h-10 rounded-full bg-white border ${borderTheme} flex items-center justify-center flex-shrink-0 mb-1 shadow-sm">${isCapoo ? '🐱' : '👑'}</div>`;
     }
 
     function renderChatStream(data) {
-      latestChatData = data;
-      chatFeed.innerHTML = '';
-
+      latestChatData = data; chatFeed.innerHTML = '';
       if (!data || Object.keys(data).length === 0) {
-        chatFeed.innerHTML = `
-          <div class="text-center py-20 border-2 border-dashed border-white/50 rounded-3xl p-8 bg-white/40 backdrop-blur-md shadow-sm">
-            <img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" class="w-16 h-16 mx-auto mb-4 opacity-80 drop-shadow-sm">
-            <p class="font-serif text-xl text-app-text font-bold">Chưa có dòng tâm sự nào...</p>
-            <p class="text-sm text-app-text mt-2">Capoo & Công Chúa hãy gửi lời nhắn đầu tiên nhé!</p>
-          </div>
-        `;
+        chatFeed.innerHTML = `<div class="text-center py-20 border-2 border-dashed border-white/50 rounded-3xl p-8 bg-white/40 backdrop-blur-md shadow-sm"><img src="https://media.tenor.com/PsmK0Q8g9CgAAAAi/capoo-blue.gif" class="w-16 h-16 mx-auto mb-4 opacity-80 drop-shadow-sm"><p class="font-serif text-xl text-app-text font-bold">Chưa có dòng tâm sự nào...</p><p class="text-sm text-app-text mt-2">Capoo & Công Chúa hãy gửi lời nhắn đầu tiên nhé!</p></div>`;
         return;
       }
 
-      const messageList = Object.keys(data).map(key => ({
-        key,
-        ...data[key]
-      })).sort((a, b) => a.createdAt - b.createdAt);
-
+      const messageList = Object.keys(data).map(k => ({ key: k, ...data[k] })).sort((a, b) => a.createdAt - b.createdAt);
       let lastDateString = "";
 
       messageList.forEach(item => {
         const isCapoo = item.authorId === 'capoo';
         const isOwner = currentUser && currentUser.id === item.authorId;
+        const itemDateStr = new Date(item.createdAt).toLocaleDateString('vi-VN', { day: 'numeric', month: 'long', year: 'numeric' });
 
-        // Header ngày tháng
-        const itemDateStr = formatDateHeader(item.createdAt);
         if (itemDateStr !== lastDateString) {
           lastDateString = itemDateStr;
-          const dateDivider = document.createElement('div');
-          dateDivider.className = "flex items-center justify-center my-8";
-          dateDivider.innerHTML = `
-            <span class="text-sm font-mono font-semibold text-app-text bg-white/80 backdrop-blur-sm border border-white px-5 py-2 rounded-full shadow-sm">
-              ✨ ${itemDateStr} ✨
-            </span>
-          `;
-          chatFeed.appendChild(dateDivider);
+          chatFeed.innerHTML += `<div class="flex items-center justify-center my-8"><span class="text-sm font-mono font-semibold text-app-text bg-white/80 backdrop-blur-sm border border-white px-5 py-2 rounded-full shadow-sm">✨ ${itemDateStr} ✨</span></div>`;
         }
 
-        // Nội dung tin nhắn (Font to, rõ ràng)
         let bodyHtml = '';
         if (item.type === 'text') {
-          bodyHtml = `<p class="text-[15px] sm:text-base leading-relaxed whitespace-pre-line">${escapeHtml(item.content)}</p>`;
+          bodyHtml = `<p class="text-[15px] sm:text-base leading-relaxed whitespace-pre-line text-app-text">${escapeHtml(item.content)}</p>`;
         } else if (item.type === 'todo') {
-          bodyHtml = `
-            <div class="flex items-start gap-3">
-              <input 
-                type="checkbox" 
-                ${item.completed ? 'checked' : ''} 
-                onchange="toggleTodo('${item.key}', ${item.completed})" 
-                class="chat-checkbox flex-shrink-0"
-              >
-              <span class="text-[15px] sm:text-base ${item.completed ? 'line-through opacity-60' : ''} transition leading-relaxed">${escapeHtml(item.content)}</span>
-            </div>`;
+          bodyHtml = `<div class="flex items-start gap-3"><input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleTodo('${item.key}', ${item.completed})" class="chat-checkbox flex-shrink-0"><span class="text-[15px] sm:text-base text-app-text ${item.completed ? 'line-through opacity-60' : ''} transition leading-relaxed">${escapeHtml(item.content)}</span></div>`;
         } else if (item.type === 'callout') {
-          bodyHtml = `
-            <div class="flex items-start gap-3 p-4 rounded-xl bg-white/70 border border-black/5 text-[15px] sm:text-base shadow-sm">
-              <span class="mt-0.5 text-lg">${isCapoo ? '🐱' : '🎀'}</span>
-              <p class="leading-relaxed whitespace-pre-line font-semibold text-app-text">${escapeHtml(item.content)}</p>
-            </div>`;
+          bodyHtml = `<div class="flex items-start gap-3 p-4 rounded-xl bg-white/70 border border-black/5 text-[15px] sm:text-base shadow-sm"><span class="mt-0.5 text-lg">${isCapoo ? '🐱' : '🎀'}</span><p class="leading-relaxed whitespace-pre-line font-semibold text-app-text">${escapeHtml(item.content)}</p></div>`;
         } else if (item.type === 'image') {
-          bodyHtml = `
-            <div class="space-y-3">
-              <img src="${item.image}" loading="lazy" class="w-full max-h-96 object-cover rounded-xl border border-black/5 shadow-sm">
-              ${item.content ? `<p class="text-[15px] sm:text-base italic opacity-90">${escapeHtml(item.content)}</p>` : ''}
-            </div>`;
+          bodyHtml = `<div class="space-y-3"><img src="${item.image}" loading="lazy" class="w-full max-h-96 object-cover rounded-xl border border-black/5 shadow-sm">${item.content ? `<p class="text-[15px] sm:text-base italic opacity-90 text-app-text">${escapeHtml(item.content)}</p>` : ''}</div>`;
+        } else if (item.type === 'gif') {
+          // Render GIF riêng biệt (không có background bong bóng trắng bóc, cho giống messenger)
+          bodyHtml = `<img src="${item.image}" loading="lazy" class="w-32 sm:w-40 h-auto rounded-lg">`;
         }
 
-        // Tạo Bong Bóng Chat
-        const row = document.createElement('div');
-        row.className = `flex items-end gap-3 ${isCapoo ? 'justify-start' : 'justify-end'} group`;
+        const bubbleTheme = isCapoo ? 'bg-app-capooBg border-app-capooBorder' : 'bg-app-princessBg border-app-princessBorder';
+        const borderRadius = isCapoo ? 'rounded-tl-2xl rounded-tr-2xl rounded-br-2xl rounded-bl-sm' : 'rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-sm';
+        
+        // Bỏ padding & border nếu là tin nhắn GIF
+        const bubbleStyle = item.type === 'gif' ? '' : `p-4 border ${bubbleTheme} ${borderRadius}`;
 
-        const bubbleTheme = isCapoo 
-          ? 'bg-app-capooBg border-app-capooBorder text-app-capooText rounded-tl-2xl rounded-tr-2xl rounded-br-2xl rounded-bl-sm' 
-          : 'bg-app-princessBg border-app-princessBorder text-app-princessText rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-sm';
-
-        // Avatar to hơn
-        const avatar = isCapoo 
-          ? `<div class="w-10 h-10 rounded-full bg-white border border-app-capooBorder flex items-center justify-center text-base flex-shrink-0 mb-1 shadow-sm">🐱</div>`
-          : `<div class="w-10 h-10 rounded-full bg-white border border-app-princessBorder flex items-center justify-center text-base flex-shrink-0 mb-1 shadow-sm">👑</div>`;
+        const avatar = getAvatarHtml(item.authorId);
 
         const bubbleContent = `
           <div class="max-w-[85%] sm:max-w-[75%]">
             <div class="text-xs font-bold mb-1.5 px-1.5 opacity-60 flex items-center gap-1.5 ${isCapoo ? 'justify-start' : 'justify-end'}">
               <span>${escapeHtml(item.authorName)}</span>
             </div>
-
-            <div class="chat-bubble p-4 border ${bubbleTheme}">
+            <div class="chat-bubble ${bubbleStyle}">
               ${bodyHtml}
-              
-              <div class="flex items-center justify-between gap-4 text-[11px] opacity-70 font-mono mt-3 pt-2 border-t border-black/10">
+              <div class="flex items-center justify-between gap-4 text-[11px] opacity-70 font-mono mt-2 pt-2 border-t border-black/5 ${item.type === 'gif' ? 'px-1' : ''}">
                 <div class="flex items-center gap-1.5">${formatDualTimestamp(item.createdAt)}</div>
-                ${isOwner ? `
-                  <button onclick="deleteMessage('${item.key}', '${item.authorId}')" class="text-app-muted hover:text-red-500 font-bold transition hover:scale-110" title="Xóa tin nhắn">
-                    <i class="fa-solid fa-trash-can text-xs"></i>
-                  </button>` : ''}
+                ${isOwner ? `<button onclick="deleteMessage('${item.key}', '${item.authorId}')" class="text-app-muted hover:text-red-500 font-bold transition hover:scale-110" title="Xóa tin nhắn"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ''}
               </div>
             </div>
           </div>
         `;
 
-        if (isCapoo) {
-          row.innerHTML = avatar + bubbleContent;
-        } else {
-          row.innerHTML = bubbleContent + avatar;
-        }
-
+        const row = document.createElement('div');
+        row.className = `flex items-end gap-3 ${isCapoo ? 'justify-start' : 'justify-end'} group`;
+        row.innerHTML = isCapoo ? (avatar + bubbleContent) : (bubbleContent + avatar);
         chatFeed.appendChild(row);
       });
     }
 
-    db.ref('duo_chat_stream').on('value', (snapshot) => {
-      renderChatStream(snapshot.val());
-    });
+    db.ref('duo_chat_stream').on('value', snap => renderChatStream(snap.val()));
   </script>
 </body>
 </html>
